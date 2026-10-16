@@ -302,7 +302,7 @@ label.stat{display:block;border-color:var(--accent)}
       <label class="usersel" title="الشخص الذي يقوم بالإضافة">👤<select id="userSel" aria-label="الشخص الذي يقوم بالإضافة"></select></label>
       <button class="iconbtn" id="syncBtn" data-act="sync" aria-label="المزامنة">☁️</button>
       <button class="iconbtn" data-act="themes" aria-label="الألوان والتصميم" title="الألوان والتصميم">🎨</button>
-      <button class="iconbtn adm" data-act="settings" aria-label="الإعدادات">⚙</button>
+      <button class="iconbtn" data-act="settings" aria-label="الإعدادات" title="الإعدادات">⚙️</button>
       <button class="btn" id="adminBtn" data-act="admin">🔒 <span class="lbl">دخول المتحكم</span></button>
     </div>
   </div>
@@ -751,7 +751,10 @@ const actions={
   if(admin){admin=false;render();return toast('تم الخروج من وضع المتحكم')}
   if(!db.settings.pin)return modal('إنشاء كلمة مرور المتحكم',`<p class="muted" style="margin:0">أنشئ كلمة مرور للتحكم بالمنصة (إضافة المشاريع وتحديد التواريخ وإكمال المراحل). الزوار يشاهدون المتابعة فقط.</p><label>كلمة المرور (4 أحرف أو أرقام على الأقل)<input name="pin" type="password" required minlength="4"></label>`,d=>{db.settings.pin=d.pin;save();admin=true;render();toast('أهلاً بك في وضع المتحكم')},'إنشاء ودخول');
   modal('دخول المتحكم',`<label>كلمة المرور<input name="pin" type="password" required></label>`,d=>{if(d.pin!==db.settings.pin){toast('كلمة المرور غير صحيحة');return false}admin=true;render();toast('أهلاً بك في وضع المتحكم')},'دخول')},
- settings:()=>modal('الإعدادات',`
+ settings:()=>{if(admin)return actions.openSettings();
+  if(!db.settings.pin)return toast('🔒 ادخل كمتحكم أولاً لفتح الإعدادات'),actions.admin();
+  modal('🔒 الإعدادات للمتحكم',`<label>كلمة المرور<input name="pin" type="password" required></label>`,d=>{if(d.pin!==db.settings.pin){toast('كلمة المرور غير صحيحة');return false}admin=true;render();setTimeout(()=>actions.openSettings(),50)},'دخول')},
+ openSettings:()=>modal('⚙️ الإعدادات',`
   <h4 class="sh">⚙️ عام</h4>
   <label>العملة<input name="currency" value="${esc(db.settings.currency)}"></label>
   <label>الأشخاص الذين يقومون بالإضافة (اسم في كل سطر)<textarea name="people" rows="3">${esc(db.settings.people.join('\n'))}</textarea></label>

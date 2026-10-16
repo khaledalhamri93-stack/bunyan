@@ -65,6 +65,9 @@ html[data-style=bold] h1{color:var(--accent-dark)}
  .rpf{margin-top:14px;color:#777;font-size:10px;border-top:1px solid #ccc;padding-top:6px}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+.ready{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;background:var(--bg);border-radius:12px;text-align:center}
+.ready .ricon{font-size:44px}.ready b{word-break:break-word}.ready small{color:var(--muted)}
+.bigb{justify-content:center;padding:13px;font-size:16px}
 .thgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .thbtn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:2px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-size:12px;font-weight:700}
 .thbtn.on{border-color:var(--ink)}
@@ -593,13 +596,13 @@ function reportsModal(){if(!db.projects.length)return toast('لا توجد مش�
  ${db.projects.length>1?`<label>المشروع<select id="repPj" data-act-change="repPj">${db.projects.map(x=>`<option value="${x.id}" ${x.id===p.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select></label>`:''}
  <div class="repc"><b>🧾 كشف قائمة مدفوعات</b><small>بنفس ترتيب جداولك: المبلغ، المتبقي، إجمالي المدفوعات، المتابعة</small>
   <select id="repL">${p.ledgers.map(l=>`<option value="${l.id}" ${l.id===view.lid?'selected':''}>${esc(l.name)} (${l.entries.length})</option>`).join('')}</select>
-  <button type="button" class="btn primary" data-act="repLedger">🖨 طباعة / حفظ PDF</button></div>
+  <div class="row gap"><button type="button" class="btn primary grow" data-act="repLedger">📄 ملف PDF</button><button type="button" class="btn" data-act="repLedgerP">🖨 طباعة</button></div></div>
  <div class="repc"><b>📊 التقرير الشامل للمشروع</b><small>نسبة الإنجاز، المراحل وحالتها، ملخص كل القوائم والتنبيهات</small>
   <label class="check"><input type="checkbox" id="repAll"> تضمين تفاصيل كل القوائم</label>
-  <button type="button" class="btn primary" data-act="repProject">🖨 طباعة / حفظ PDF</button></div>
+  <div class="row gap"><button type="button" class="btn primary grow" data-act="repProject">📄 ملف PDF</button><button type="button" class="btn" data-act="repProjectP">🖨 طباعة</button></div></div>
  <div class="repc"><b>📗 تصدير Excel</b><small>ملف فيه ورقة لكل قائمة، وورقة للملخص، وورقة لمراحل العمل</small>
   <button type="button" class="btn" data-act="repExcel">⬇ تنزيل ملف Excel</button></div>
- <p class="muted small" style="margin:0">لحفظ التقرير PDF اختر «حفظ كـ PDF» من نافذة الطباعة.</p>`,null)}
+ <p class="muted small" style="margin:0">بعد تجهيز الملف اضغط «حفظ / مشاركة»، وعلى الآيفون اختر «حفظ في الملفات».</p>`,null);loadXLSX().catch(()=>{})}
 document.addEventListener('change',e=>{if(e.target.id==='repPj'){repPid=e.target.value;reportsModal()}});
 const ledRows=l=>{let run=0;const t=+l.total||0;return l.entries.map((e,i)=>{run+=(+e.amount||0);return{i:i+1,e,run,rem:t?t-run:null}})};
 const amt=v=>v===''||v==null?'':num(v);
@@ -630,9 +633,78 @@ async function excelExport(p){toast('جارٍ تجهيز ملف Excel…');
  const fname=`${p.name} - ${today()}`;
  try{await loadXLSX();const wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};const used=new Set();
   sheets.forEach(([n,rows])=>{let nm=n.replace(/[\\\/\?\*\[\]:]/g,' ').slice(0,31)||'ورقة';while(used.has(nm))nm=nm.slice(0,28)+'_'+used.size;used.add(nm);const ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=rows[0].map((_,c)=>({wch:c===1?34:14}));ws['!views']=[{RTL:true}];XLSX.utils.book_append_sheet(wb,ws,nm)});
-  XLSX.writeFile(wb,fname+'.xlsx');toast('📗 تم تنزيل ملف Excel')}
+  const out=XLSX.write(wb,{bookType:'xlsx',type:'array'});fileReady(new File([out],fname+'.xlsx',{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}))}
  catch(err){const csv='﻿'+sheets.map(([n,rows])=>[[n]].concat(rows).map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n')).join('\n\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=fname+'.csv';a.click();toast('تم التنزيل بصيغة CSV (تفتح في Excel)')}}
+  fileReady(new File([csv],fname+'.csv',{type:'text/csv;charset=utf-8'}))}}
+
+// ===== ملفات PDF بدون مكتبات =====
+let readyFile=null;
+const isMob=()=>/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform||''));
+const unesc=t=>String(t??'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'");
+function dlFile(f){const u=URL.createObjectURL(f),a=document.createElement('a');a.href=u;a.download=f.name;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000);toast('⬇ تم التنزيل')}
+function fileReady(f){readyFile=f;modal('✅ الملف جاهز',`<div class="ready"><div class="ricon">${/\.pdf$/.test(f.name)?'📄':'📗'}</div><b>${esc(f.name)}</b><small>${Math.max(1,Math.round(f.size/1024))} KB</small></div>
+ <button type="button" class="btn primary bigb" data-act="saveFile">📥 حفظ / مشاركة الملف</button>
+ <button type="button" class="btn bigb" data-act="openFile">👁 فتح الملف</button>
+ <p class="muted small" style="margin:0">على الآيفون: اضغط «حفظ / مشاركة» ثم اختر «حفظ في الملفات»، أو أرسله مباشرة عبر واتساب أو البريد.</p>`,null)}
+const LCOLS=[['التسلسل',5,'c'],['المهمة',20,'r'],['التاريخ',12,'c'],['المبلغ',8,'c'],['تاريخ البدء',9,'c'],['تاريخ التسليم',9,'c'],['المتبقي',9,'c'],['إجمالي المدفوعات',10,'c'],['المتابعة',9,'c'],['ملاحظات',9,'r']];
+const ledKpis=l=>{const t=+l.total||0,pd=paid(l);return{k:'kpis',items:[['المبلغ الإجمالي',t?unesc(money(t)):'غير محدد'],['إجمالي المدفوعات',unesc(money(pd))],['المتبقي',t?unesc(money(t-pd)):'—',t&&pd>t],['عدد البنود',String(l.entries.length)]]}};
+const ledTable=l=>({k:'table',cols:LCOLS,rows:ledRows(l).map(({i,e,run,rem})=>[i,e.name,e.date?fmtD(e.date):'',amt(e.amount),e.start?fmtD(e.start):'',e.end?fmtD(e.end):'',rem==null?'':{t:num(rem),red:rem<0},num(run),e.status&&FS[e.status]?FS[e.status][0]:'',e.note||'']),foot:[{t:'إجمالي المدفوعات لـ'+l.name,span:3},{t:num(paid(l))},{t:'',span:6}]});
+function ledgerDoc(p,l){const a=ledAlert(l);return{title:'كشف '+l.name,blocks:[{k:'head',t:'كشف '+l.name,s:p.name},ledKpis(l),...(a?[{k:'alert',t:unesc(a.txt)}]:[]),...(l.note?[{k:'p',t:l.note}]:[]),ledTable(l)]}}
+function projectDoc(p,all){const sp=spent(p),tt=p.ledgers.reduce((a,l)=>a+(+l.total||0),0);
+ const B=[{k:'head',t:'التقرير الشامل',s:p.name},{k:'kpis',items:[['نسبة الإنجاز',prog(p)+'%'],['المراحل المنجزة',`${p.steps.filter(x=>x.done).length} / ${p.steps.length}`],['إجمالي المدفوعات',unesc(money(sp))],['مجموع المبالغ الإجمالية',tt?unesc(money(tt)):'—']]},
+  {k:'p',t:[TYPES[p.type].label,p.location,p.start&&'البدء '+fmtD(p.start),p.end&&'التسليم المستهدف '+fmtD(p.end)].filter(Boolean).join(' · ')},
+  ...projAlerts(p).map(a=>({k:'alert',t:unesc(a.txt)})),
+  {k:'h2',t:'ملخص قوائم المدفوعات'},
+  {k:'table',cols:[['القائمة',20,'r'],['المبلغ الإجمالي',12,'c'],['إجمالي المدفوعات',13,'c'],['المتبقي',12,'c'],['النسبة',9,'c'],['البنود',8,'c'],['تم التنفيذ',9,'c'],['جاري',8,'c'],['متأخر',9,'c']],
+   rows:p.ledgers.map(l=>{const t=+l.total||0,pd=paid(l),c=k=>l.entries.filter(e=>e.status===k).length;return[l.name,t?num(t):'—',num(pd),t?{t:num(t-pd),red:pd>t}:'—',t?Math.round(pd/t*100)+'%':'—',l.entries.length,c('done'),c('doing'),c('late')]}),
+   foot:[{t:'المجموع'},{t:tt?num(tt):'—'},{t:num(sp)},{t:tt?num(tt-sp):'—'},{t:'',span:5}]},
+  {k:'h2',t:'مراحل العمل'},
+  {k:'table',cols:[['#',6,'c'],['المرحلة',34,'r'],['الموعد المحدد',15,'c'],['الحالة',13,'c'],['تاريخ الإنجاز',15,'c'],['ملاحظات',17,'r']],rows:p.steps.map((x,i)=>[i+1,x.title,fmtD(x.date),{t:ST[st(p,x)][0],red:st(p,x)==='late'},x.done?fmtD(x.doneDate):'',x.note||''])}];
+ if(all)p.ledgers.forEach(l=>B.push({k:'break'},{k:'h2',t:'كشف '+l.name},ledKpis(l),ledTable(l)));
+ return{title:'التقرير الشامل',blocks:B}}
+async function renderDoc(doc){try{await document.fonts.ready}catch(e){}
+ const W=1190,H=1684,M=56,cs=getComputedStyle(document.documentElement),AC=cs.getPropertyValue('--accent').trim()||'#ec7d32',AD=cs.getPropertyValue('--accent-dark').trim()||'#b85a1b';
+ const FF='Tajawal,"Geeza Pro","Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif';const pages=[];let c,x,y;
+ const F=(sz,w=400)=>{x.font=`${w} ${sz}px ${FF}`};
+ const newPage=()=>{c=document.createElement('canvas');c.width=W;c.height=H;x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);x.direction='rtl';x.textBaseline='middle';pages.push(c);y=M;F(14);x.fillStyle='#999';x.textAlign='center';x.fillText(`بُنيان — ${doc.title} — صفحة ${pages.length}`,W/2,H-26)};
+ const room=h=>y+h<=H-M-10;
+ const wrap=(t,mw,ml=3)=>{t=String(t??'');if(!t)return[''];if(x.measureText(t).width<=mw)return[t];const ws=t.split(/\s+/),L=[];let cur='';for(const w of ws){const tt=cur?cur+' '+w:w;if(!cur||x.measureText(tt).width<=mw)cur=tt;else{L.push(cur);cur=w}}if(cur)L.push(cur);if(L.length>ml){L.length=ml;L[ml-1]+='…'}return L};
+ const rr=(X,Y,w,h,r,fill,stroke)=>{x.beginPath();if(x.roundRect)x.roundRect(X,Y,w,h,r);else x.rect(X,Y,w,h);if(fill){x.fillStyle=fill;x.fill()}if(stroke){x.strokeStyle=stroke;x.lineWidth=1.5;x.stroke()}};
+ newPage();
+ for(const b of doc.blocks){
+  if(b.k==='break'){newPage();continue}
+  if(b.k==='head'){F(34,800);x.fillStyle='#111';x.textAlign='right';x.fillText(b.t,W-M,y+20);F(17);x.fillStyle='#666';x.fillText(b.s||'',W-M,y+58);x.textAlign='left';x.fillText(fmtD(today()),M,y+58);y+=80;x.fillStyle=AC;x.fillRect(M,y,W-2*M,4);y+=22;continue}
+  if(b.k==='h2'){if(!room(90))newPage();y+=8;F(22,800);x.fillStyle=AD;x.textAlign='right';x.fillText(b.t,W-M,y+14);y+=38;continue}
+  if(b.k==='p'){F(16);const L=wrap(b.t,W-2*M,10);for(const l of L){if(!room(26))newPage();F(16);x.fillStyle='#555';x.textAlign='right';x.fillText(l,W-M,y+13);y+=26}y+=6;continue}
+  if(b.k==='alert'){F(17,700);const L=wrap(b.t,W-2*M-30,4),h=L.length*26+18;if(!room(h))newPage();rr(M,y,W-2*M,h,8,'#fdeeec','#f3b8b2');F(17,700);x.fillStyle='#b3261e';x.textAlign='right';L.forEach((l,i)=>x.fillText(l,W-M-15,y+22+i*26));y+=h+10;continue}
+  if(b.k==='kpis'){const n=b.items.length,g=12,bw=(W-2*M-(n-1)*g)/n,h=80;if(!room(h))newPage();b.items.forEach(([lb,v,red],i)=>{const bx=W-M-(i+1)*bw-i*g;rr(bx,y,bw,h,10,'#fff','#cfcfcf');x.textAlign='right';F(15);x.fillStyle='#777';x.fillText(lb,bx+bw-14,y+22);F(24,800);x.fillStyle=red?'#b3261e':'#111';x.fillText(String(v),bx+bw-14,y+54)});y+=h+16;continue}
+  if(b.k==='table'){const tw=W-2*M,sum=b.cols.reduce((a,q)=>a+q[1],0),cw=b.cols.map(q=>q[1]/sum*tw),cx=[];let acc=W-M;cw.forEach(w=>{cx.push(acc);acc-=w});
+   const ct=v=>v&&typeof v==='object'?v:{t:v==null?'':String(v)};
+   const mk=(cells,head,fill)=>{F(head?14:15,head?700:400);const L=cells.map((v,i)=>wrap(ct(v).t,cw[i]-12,head?2:3)),rh=Math.max(...L.map(l=>l.length))*20+(head?18:14);
+    return{rh,paint:()=>{if(fill){x.fillStyle=fill;x.fillRect(M,y,tw,rh)}x.strokeStyle='#9a9a9a';x.lineWidth=1;
+     cells.forEach((v,i)=>{x.strokeRect(cx[i]-cw[i],y,cw[i],rh);const o=ct(v),al=b.cols[i][2];F(head?14:15,head||o.red?700:400);x.fillStyle=o.red?'#b3261e':'#111';x.textAlign=al==='c'?'center':'right';const X=al==='c'?cx[i]-cw[i]/2:cx[i]-6,top=y+rh/2-(L[i].length-1)*10;L[i].forEach((l,k)=>x.fillText(l,X,top+k*20))});y+=rh}}};
+   const head=()=>mk(b.cols.map(q=>q[0]),true,'#d9d9d9').paint();
+   if(!room(100))newPage();head();
+   const rows=b.rows.length?b.rows:[['','لا توجد بيانات',...b.cols.slice(2).map(()=>'')]];
+   rows.forEach((row,ri)=>{const r=mk(row,false,ri%2===0?'#e2efda':null);if(!room(r.rh)){newPage();head()}r.paint()});
+   if(b.foot){const rh=42;if(!room(rh)){newPage();head()}x.fillStyle='#e2efda';x.fillRect(M,y,tw,rh);let ci=0;
+    b.foot.forEach(f=>{const sp=f.span||1,right=cx[ci],w=cw.slice(ci,ci+sp).reduce((a,q)=>a+q,0);x.strokeStyle='#9a9a9a';x.strokeRect(right-w,y,w,rh);F(16,800);x.fillStyle='#111';x.textAlign=sp>1?'right':'center';x.fillText(f.t||'',sp>1?right-8:right-w/2,y+rh/2);ci+=sp});y+=rh}
+   y+=16;continue}}
+ return pages}
+function makePDF(imgs){const enc=new TextEncoder(),parts=[],offs=[];let len=0;const put=v=>{const b=typeof v==='string'?enc.encode(v):v;parts.push(b);len+=b.length};
+ const n=imgs.length,PW=595.28,PH=841.89;put('%PDF-1.4\n');
+ offs[1]=len;put('1 0 obj\n<</Type/Catalog/Pages 2 0 R>>\nendobj\n');
+ offs[2]=len;put(`2 0 obj\n<</Type/Pages/Count ${n}/Kids[${imgs.map((_,i)=>(3+i*3)+' 0 R').join(' ')}]>>\nendobj\n`);
+ imgs.forEach((im,i)=>{const pg=3+i*3,ct=pg+1,ig=pg+2,cs=`q ${PW} 0 0 ${PH} 0 0 cm /Im0 Do Q`;
+  offs[pg]=len;put(`${pg} 0 obj\n<</Type/Page/Parent 2 0 R/MediaBox[0 0 ${PW} ${PH}]/Resources<</XObject<</Im0 ${ig} 0 R>>>>/Contents ${ct} 0 R>>\nendobj\n`);
+  offs[ct]=len;put(`${ct} 0 obj\n<</Length ${cs.length}>>\nstream\n${cs}\nendstream\nendobj\n`);
+  offs[ig]=len;put(`${ig} 0 obj\n<</Type/XObject/Subtype/Image/Width ${im.w}/Height ${im.h}/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length ${im.d.length}>>\nstream\n`);put(im.d);put('\nendstream\nendobj\n')});
+ const total=3+n*3,xr=len;put(`xref\n0 ${total}\n0000000000 65535 f \n`+offs.slice(1,total).map(o=>String(o).padStart(10,'0')+' 00000 n \n').join('')+`trailer\n<</Size ${total}/Root 1 0 R>>\nstartxref\n${xr}\n%%EOF`);
+ return new Blob(parts,{type:'application/pdf'})}
+async function buildPDF(doc,name){closeModal();toast('⏳ جارٍ تجهيز ملف PDF…');
+ try{const pages=await renderDoc(doc);const imgs=[];for(const cv of pages){const bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.9));imgs.push({d:new Uint8Array(await bl.arrayBuffer()),w:cv.width,h:cv.height})}
+  const safe=name.replace(/[\\\/:*?"<>|]/g,' ').trim();fileReady(new File([makePDF(imgs)],safe+'.pdf',{type:'application/pdf'}))}
+ catch(e){console.error(e);toast('تعذّر إنشاء PDF — جرّب زر الطباعة')}}
 const actions={
  home:()=>go(),
  themes:()=>themeModal(),
@@ -699,8 +771,12 @@ const actions={
   if(d.n1!==d.n2){toast('كلمتا المرور غير متطابقتين');return false}
   db.settings.pin=d.n1;save();toast('🔑 تم تغيير كلمة المرور')},'تغيير'),
  reports:()=>reportsModal(),
- repLedger:()=>{const p=repP(),l=p.ledgers.find(x=>x.id===$('#repL').value)||p.ledgers[0];printHTML(`كشف ${l.name} — ${p.name}`,ledgerReport(p,l))},
- repProject:()=>{const p=repP();printHTML(`التقرير الشامل — ${p.name}`,projectReport(p,$('#repAll').checked))},
+ repLedger:()=>{const p=repP(),l=p.ledgers.find(x=>x.id===$('#repL').value)||p.ledgers[0];buildPDF(ledgerDoc(p,l),`كشف ${l.name} - ${p.name}`)},
+ repProject:()=>{const p=repP();buildPDF(projectDoc(p,$('#repAll').checked),`التقرير الشامل - ${p.name}`)},
+ repLedgerP:()=>{const p=repP(),l=p.ledgers.find(x=>x.id===$('#repL').value)||p.ledgers[0];printHTML(`كشف ${l.name} — ${p.name}`,ledgerReport(p,l))},
+ repProjectP:()=>{const p=repP();printHTML(`التقرير الشامل — ${p.name}`,projectReport(p,$('#repAll').checked))},
+ saveFile:()=>{const f=readyFile;if(!f)return;if(isMob()&&navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:f.name}).catch(e=>{if(e&&e.name!=='AbortError')dlFile(f)})}else dlFile(f)},
+ openFile:()=>{if(!readyFile)return;const u=URL.createObjectURL(readyFile);const w=window.open(u,'_blank');if(!w)location.href=u},
  repExcel:()=>excelExport(repP()),
  exportData:()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.download='bunyan-backup-'+today()+'.json';a.click();toast('تم التصدير')},
  resetData:()=>{if(confirm('سيتم مسح كل المشاريع والبيانات. متأكد؟')){db={settings:{...db.settings},projects:[]};save();closeModal();go();render()}}

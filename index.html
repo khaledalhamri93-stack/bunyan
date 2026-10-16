@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>بُنيان | متابعة المشاريع العقارية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#fbf9f5;--paper:#ffffff;--ink:#33414d;--muted:#7d8792;--line:#ece6dc;--accent:#ec7d32;--accent-dark:#b85a1b;--accent-soft:#fff1e6;--blue:#3a7cb0;--blue-soft:#eaf3fb;--ok:#2f9a62;--ok-soft:#eaf7f0;--late:#d2493d;--late-soft:#fdeeec;--head:#fff4ea;--grid:rgba(236,125,50,.05);--shadow:0 1px 2px rgba(51,65,77,.04),0 6px 18px rgba(51,65,77,.05)}
+:root{--accent-dark:#b85a1b;--stripe:#ffd9bd;--accent2:#f5a66a;--head:#fff4ea}
+html[data-theme=orange]{--accent:#ec7d32;--accent-dark:#b85a1b;--accent-soft:#fff1e6;--head:#fff4ea;--stripe:#ffd9bd;--accent2:#f5a66a;--bg:#fbf9f5;--grid:rgba(236,125,50,.05)}
+html[data-theme=sky]{--accent:#2f80c8;--accent-dark:#1d5f99;--accent-soft:#eaf4fd;--head:#f0f7fe;--stripe:#c5e0f7;--accent2:#6db3ea;--bg:#f7fafd;--grid:rgba(47,128,200,.05)}
+html[data-theme=teal]{--accent:#1f9e9a;--accent-dark:#13716e;--accent-soft:#e5f6f5;--head:#effaf9;--stripe:#bfe7e5;--accent2:#5ec8c3;--bg:#f6fbfb;--grid:rgba(31,158,154,.05)}
+html[data-theme=green]{--accent:#3a9a6a;--accent-dark:#24724c;--accent-soft:#e8f6ef;--head:#f0f9f4;--stripe:#c4e8d4;--accent2:#74c69d;--bg:#f7fbf8;--grid:rgba(58,154,106,.05)}
+html[data-theme=purple]{--accent:#7b5cc4;--accent-dark:#563c9a;--accent-soft:#f2eefc;--head:#f6f3fd;--stripe:#dacff5;--accent2:#a68fe0;--bg:#faf9fd;--grid:rgba(123,92,196,.05)}
+html[data-theme=rose]{--accent:#d4567a;--accent-dark:#a33558;--accent-soft:#fdeef3;--head:#fef4f7;--stripe:#f6cada;--accent2:#e98aa6;--bg:#fdf9fa;--grid:rgba(212,86,122,.05)}
+html[data-theme=gold]{--accent:#c39424;--accent-dark:#8f6a12;--accent-soft:#fbf4e2;--head:#fdf8ec;--stripe:#f0dfae;--accent2:#e0bd5f;--bg:#fcfaf4;--grid:rgba(195,148,36,.05)}
+html[data-theme=slate]{--accent:#5b7083;--accent-dark:#3d4f60;--accent-soft:#eef2f6;--head:#f3f6f9;--stripe:#d3dde6;--accent2:#8fa3b5;--bg:#f8f9fb;--grid:rgba(91,112,131,.05)}
+html[data-style=sharp] *{border-radius:3px!important}
+html[data-style=sharp] .tick,html[data-style=sharp] .pill,html[data-style=sharp] .pbar,html[data-style=sharp] .pbar>div,html[data-style=sharp] .sw{border-radius:999px!important}
+html[data-style=sharp] body{background-image:none}
+html[data-style=sharp] .card,html[data-style=sharp] .stat,html[data-style=sharp] .phead,html[data-style=sharp] .sbody,html[data-style=sharp] .lcard,html[data-style=sharp] .tbl{box-shadow:none;border-color:#d9d3c8}
+html[data-style=sharp] .card{border-top:3px solid var(--accent)}
+html[data-style=bold] .top{background:var(--accent)}
+html[data-style=bold] .top::after{background:var(--accent-dark)}
+html[data-style=bold] .brand b,html[data-style=bold] .brand small{color:#fff}
+html[data-style=bold] .logo{background:#fff;border-color:#fff}
+html[data-style=bold] body{background-image:none;background-color:var(--head)}
+html[data-style=bold] .card,html[data-style=bold] .stat,html[data-style=bold] .phead,html[data-style=bold] .lcard{box-shadow:0 10px 30px rgba(40,50,60,.10);border-color:transparent}
+html[data-style=bold] .phead{border-top:5px solid var(--accent)}
+html[data-style=bold] h1{color:var(--accent-dark)}
+#syncBtn[data-st=err]{border-color:var(--late);background:var(--late-soft)}
+#syncBtn[data-st=off]{border-style:dashed}
+.alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.alert{padding:10px 14px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid}
+.alert.warn{background:#fff8e6;color:#9a6a00;border-color:#f3d98b}.alert.over{background:var(--late-soft);color:var(--late);border-color:#f3b8b2}
+.pill.warn{background:#fff8e6;color:#9a6a00}
+.sh{margin:6px 0 -4px;font-size:14px;padding-top:10px;border-top:1px dashed var(--line)}.sh:first-child{border:0;padding-top:0}
+.repc{display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.repc small{color:var(--muted);font-size:12px;margin-top:-6px}
+#printArea{display:none}
+@media print{
+ @page{size:A4;margin:10mm}
+ body{background:#fff!important;background-image:none!important}
+ body>*:not(#printArea){display:none!important}
+ #printArea{display:block!important;color:#111;font-size:11px}
+ .rph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--accent);padding-bottom:8px;margin-bottom:12px}
+ .rph h1{font-size:20px;margin:0}.rph p{margin:2px 0 0;color:#666}.rpd{color:#666}
+ .rp h2{font-size:14px;margin:16px 0 6px;color:var(--accent-dark)}
+ .rsum{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+ .rsum div{border:1px solid #ccc;border-radius:6px;padding:6px 8px}.rsum span{display:block;color:#666;font-size:10px}.rsum b{font-size:14px}
+ .rmeta{color:#555;margin:4px 0}.rnote{margin:4px 0;color:#444}
+ .ralert{background:#fdeeec;color:#b3261e;border:1px solid #f3b8b2;padding:5px 8px;border-radius:6px;margin:4px 0;font-weight:700}
+ .rt{width:100%;min-width:0;border-collapse:collapse;font-size:10.5px;margin-top:6px}
+ .rt th{background:#d9d9d9!important;color:#111;border:1px solid #888;padding:4px;white-space:normal;text-align:center}
+ .rt td{border:1px solid #999;padding:3px 4px;text-align:center;white-space:normal}
+ .rt td.tl{text-align:right}
+ .rt tbody tr:nth-child(odd){background:#e2efda!important}
+ .rt tfoot td{background:#e2efda!important;font-weight:800;font-size:12px}
+ .rt .neg{color:#b3261e;font-weight:800}
+ .rt thead{display:table-header-group}.rt tr{break-inside:avoid}
+ .pb{break-before:page}
+ .rpf{margin-top:14px;color:#777;font-size:10px;border-top:1px solid #ccc;padding-top:6px}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+.thgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.thbtn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:2px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-size:12px;font-weight:700}
+.thbtn.on{border-color:var(--ink)}
+.sw{width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 4px rgba(255,255,255,.6)}
+.stgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stbtn{padding:10px;border:2px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;text-align:center;font-weight:800;font-size:13px}
+.stbtn small{display:block;font-weight:500;color:var(--muted);font-size:11px;margin-top:2px}
+.stbtn.on{border-color:var(--accent);background:var(--accent-soft)}
+.prev{height:34px;border-radius:6px;margin-bottom:6px;border:1px solid var(--line);background:var(--bg);position:relative;overflow:hidden}
+.prev i{position:absolute;inset:0 0 auto 0;height:9px;background:#fff;border-bottom:2px solid var(--accent)}
+.prev b{position:absolute;right:6px;left:6px;bottom:5px;height:12px;background:#fff;border-radius:6px;border:1px solid var(--line)}
+.prev.sharp b{border-radius:1px}.prev.sharp{background:#fff}
+.prev.bold i{background:var(--accent);height:11px}.prev.bold b{box-shadow:0 3px 8px rgba(0,0,0,.12);border:0}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Tajawal',system-ui,sans-serif;background-color:var(--bg);color:var(--ink);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;min-height:100vh;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.row{display:flex;align-items:center}.between{justify-content:space-between}.gap{gap:8px}.wrapf{flex-wrap:wrap}.grow{flex:1;min-width:0}.center{justify-content:center}.mb{margin-bottom:12px;gap:10px}
+.muted{color:var(--muted)}.small{font-size:13px}
+/* header */
+.top{position:sticky;top:0;z-index:20;background:var(--paper);box-shadow:var(--shadow)}
+.top::after{content:"";display:block;height:4px;background:repeating-linear-gradient(-45deg,var(--accent) 0 12px,var(--stripe) 12px 24px)}
+.top .wrap{height:64px}
+.brand{display:flex;gap:10px;align-items:center;color:inherit;text-decoration:none}
+.logo{width:40px;height:40px;border-radius:10px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--stripe);display:grid;place-items:center;flex:none}
+.logo svg{width:26px;height:26px}
+.brand b{display:block;font-size:21px;font-weight:800;line-height:1.1}
+.brand small{color:var(--muted);font-size:12px}
+.btn{font-weight:700;font-size:14px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:9px 14px;border-radius:10px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap;transition:.15s}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.ghost:hover{background:var(--paper);border-color:var(--line)}
+.danger{color:var(--late)!important}
+.iconbtn{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--paper);cursor:pointer;font-size:18px}
+body.is-admin #adminBtn{background:var(--accent-soft);color:var(--accent-dark);border-color:var(--accent)}
+body:not(.is-admin) .adm{display:none!important}
+main{padding:22px 0 70px}
+/* home */
+.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+h1{font-size:28px;margin:0 0 4px;font-weight:800;line-height:1.25}
+.hero p{margin:0;color:var(--muted);max-width:560px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stats.three{grid-template-columns:repeat(3,1fr)}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow);min-width:0}
+.stat span{color:var(--muted);font-size:13px}
+.stat b{display:block;font-size:22px;font-weight:800;margin-top:2px;overflow-wrap:anywhere}
+.stat.late b{color:var(--late)}.stat.ok b{color:var(--ok)}
+.chips{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--paper);padding:7px 14px;border-radius:999px;cursor:pointer;font-weight:700;font-size:14px}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);cursor:pointer;transition:.15s;display:flex;flex-direction:column;gap:12px}
+.card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.card-top{display:flex;gap:12px;align-items:center}
+.card h3{margin:0;font-size:18px;font-weight:800}
+.card small{color:var(--muted)}
+.ticon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex:none}
+.t-build{background:var(--accent-soft)}.t-renov{background:var(--blue-soft)}.t-buy{background:var(--ok-soft)}
+.pbar{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.pbar>div{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s}
+.pbar.big{height:14px;margin:4px 0 6px}
+.pbar.thin{height:6px;margin-top:6px}
+.pbar.thin>div{background:var(--blue)}
+.pbar.over>div{background:var(--late)}
+.pct{font-size:22px;font-weight:800}
+.next{background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column}
+.next span{font-size:12px;color:var(--muted)}
+.okt{color:var(--ok)}
+.money{font-size:14px;border-top:1px dashed var(--line);padding-top:10px}
+.money span{color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.late{background:var(--late-soft);color:var(--late)}.pill.blue{background:var(--blue-soft);color:var(--blue)}.pill.muted{background:var(--bg);color:var(--muted)}
+.pill.build{background:var(--accent-soft);color:var(--accent)}.pill.renov{background:var(--blue-soft);color:var(--blue)}.pill.buy{background:var(--ok-soft);color:var(--ok)}
+.empty{text-align:center;color:var(--muted);padding:34px 16px;border:2px dashed var(--line);border-radius:16px;background:var(--paper)}
+.empty .row{margin-top:14px;flex-wrap:wrap}
+/* project */
+.crumbs{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+.phead{display:flex;gap:20px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
+.phead h1{margin-top:6px}
+.ring{display:block}
+.ring-bg{fill:none;stroke:var(--line);stroke-width:12}
+.ring-fg{fill:none;stroke:var(--accent);stroke-width:12;stroke-linecap:round;transition:stroke-dashoffset .6s}
+.ring text{font-family:'Tajawal',sans-serif;font-weight:800;fill:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.kpis div{background:var(--bg);border-radius:10px;padding:8px 10px;min-width:0}
+.kpis span{display:block;font-size:12px;color:var(--muted)}
+.kpis b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kpis small{font-size:12px;color:var(--muted)}
+.late-t{color:var(--late);font-weight:700}
+.tabs{display:flex;gap:4px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:16px}
+.tabs button{flex:1;border:0;background:transparent;padding:10px;border-radius:9px;font-weight:800;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:var(--accent-soft);color:var(--accent-dark);box-shadow:inset 0 0 0 1px var(--stripe)}
+/* timeline */
+.timeline{list-style:none;margin:0;padding:0}
+.step{display:flex;gap:14px;position:relative}
+.step:not(:last-child)::before{content:"";position:absolute;right:19px;top:42px;bottom:2px;width:3px;border-radius:3px;background:var(--line)}
+.step.s-done:not(:last-child)::before{background:var(--ok)}
+.tick{width:40px;height:40px;border-radius:50%;flex:none;border:3px solid var(--line);background:var(--paper);font-weight:800;font-size:15px;color:var(--muted);display:grid;place-items:center;z-index:1;cursor:pointer;transition:.15s}
+.tick:disabled{cursor:default}
+body.is-admin .tick:not(:disabled):hover{transform:scale(1.08);box-shadow:0 0 0 4px var(--accent-soft)}
+.s-done .tick{background:var(--ok);border-color:var(--ok);color:#fff}
+.s-current .tick{border-color:var(--accent);color:var(--accent)}
+.s-late .tick{border-color:var(--late);color:var(--late)}
+.sbody{flex:1;min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.s-current .sbody{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.s-late .sbody{border-color:var(--late)}
+.sbody h4{margin:0;font-size:16px;font-weight:800}
+.s-done .sbody h4{color:var(--muted)}
+.meta{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:4px}
+.note{margin:8px 0 0;font-size:14px;background:var(--bg);padding:8px 10px;border-radius:8px}
+.sact,.iact{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.sact button,.iact button{border:1px solid var(--line);background:transparent;border-radius:8px;padding:4px 10px;font-size:13px;cursor:pointer;font-weight:700}
+.sact button:disabled{opacity:.35;cursor:default}
+.iact{margin-top:0}
+/* costs */
+.addform{display:grid;grid-template-columns:2fr 1.1fr .8fr 1.1fr 1.1fr 1.2fr 1.3fr auto;gap:8px;align-items:end;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px;margin:14px 0}
+input,select,textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px;font-size:15px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.live{font-size:14px;color:var(--muted);white-space:nowrap}
+.live b{color:var(--ink)}
+.items{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.items .empty{border:0;border-radius:0}
+.item{display:flex;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.item small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.tag{background:var(--blue-soft);color:var(--blue);padding:1px 8px;border-radius:6px;font-size:12px;font-weight:700;margin-left:6px}
+.itot{white-space:nowrap}
+.item.total{background:var(--head);color:var(--accent-dark);border:0;font-size:16px}
+.sec{font-size:17px;margin:22px 0 10px}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.cat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,14,18,.5);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal.hidden{display:none}
+.sheet{background:var(--paper);width:100%;max-width:480px;border-radius:18px;max-height:90vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.mhead{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+.mhead h3{margin:0;font-size:18px}
+.x{border:0;background:transparent;font-size:18px;cursor:pointer;color:var(--muted)}
+.mcontent{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.mcontent label{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:700}
+.mcontent label.check{flex-direction:row;align-items:flex-start;font-weight:500;gap:8px}
+.mcontent label.check input{width:auto;margin-top:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.mfoot{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid var(--line)}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:0 8px 24px rgba(51,65,77,.12);padding:10px 18px;border-radius:10px;font-weight:700;opacity:0;transition:.25s;pointer-events:none;z-index:60}
+#toast.show{opacity:1;transform:translateX(-50%)}
+.lsum{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:14px}
+.lcard{text-align:right;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;display:flex;flex-direction:column;gap:2px;box-shadow:var(--shadow);transition:.15s}
+.lcard span{color:var(--muted);font-size:13px;font-weight:700}.lcard b{font-size:18px}.lcard small{font-size:12px;color:var(--muted)}
+.lcard.on{border:2px solid var(--accent);background:var(--accent-soft)}
+.lcard.add{align-items:center;justify-content:center;border-style:dashed;font-weight:800;color:var(--accent);box-shadow:none}
+.lhead{display:flex;align-items:center;gap:10px;margin-bottom:10px}.lhead h2{margin:0;font-size:22px}
+.lnote{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);margin-bottom:10px}
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;margin-top:12px;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:860px}
+th{background:var(--head);color:var(--accent-dark);border-bottom:2px solid var(--stripe);padding:9px 8px;font-weight:700;white-space:nowrap;text-align:right}
+td{padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
+tbody tr:nth-child(even){background:#fcfaf6}
+tbody tr:hover{background:var(--accent-soft)}
+td .inl{width:auto;min-width:118px;padding:4px 6px}td .wname{min-width:200px}td .wnum{min-width:80px;width:90px}
+td small.by{display:block;margin-top:2px}
+.seq{color:var(--muted);text-align:center;width:40px}.neg{color:var(--late);font-weight:800}
+tfoot td{background:var(--accent-soft);font-weight:800;font-size:15px}
+.ract{display:flex;gap:6px;align-items:center}.ract .mv{min-width:90px;width:auto;font-size:12px}
+.rdel{border:1px solid var(--line);background:transparent;border-radius:8px;padding:3px 9px;cursor:pointer;color:var(--late)}
+.fs{font-weight:700;min-width:130px}
+.fs-doing{background:var(--blue-soft);color:var(--blue);border-color:var(--blue)}
+.fs-done{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.fs-late{background:var(--late-soft);color:var(--late);border-color:var(--late)}
+.fchips{margin:14px 0 0}.fchips .chip b{font-weight:800;opacity:.75;margin-right:4px}
+.chip.c-doing:not(.on){color:var(--blue)}.chip.c-done:not(.on){color:var(--ok)}.chip.c-late:not(.on){color:var(--late)}
+.cbud{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);background:var(--accent-soft);border-radius:10px;padding:8px 10px;cursor:default}
+.cbud input{background:var(--paper);font-weight:800;font-size:16px;color:var(--ink)}
+.bigin{margin-top:4px;font-size:18px;font-weight:800;background:var(--bg);width:100%}
+label.stat{display:block;border-color:var(--accent)}
+.cdel{width:34px;height:34px;flex:none;border-radius:9px;border:1px solid var(--line);background:var(--paper);cursor:pointer;font-size:15px;transition:.15s}
+.cdel:hover{background:var(--late-soft);border-color:var(--late)}
+.delbtn{color:var(--late);border-color:var(--late);background:var(--late-soft)}
+.delbtn:hover{background:var(--late);color:#fff}
+.usersel{display:flex;align-items:center;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:0 6px;height:40px}
+.usersel select{border:0;background:transparent;padding:6px 2px;width:auto;max-width:160px;font-weight:700;box-shadow:none!important;cursor:pointer}
+.inl{background:transparent;border:1px dashed var(--line);padding:6px 8px;border-radius:8px;font-size:14px}
+.inl:hover{border-color:var(--muted);background:var(--bg)}
+.inl.ttl{font-size:16px;font-weight:800;padding:4px 8px}
+.ifield{display:inline-flex;align-items:center;gap:6px}
+.ifield input{width:auto;padding:3px 6px}
+.mini{display:flex;flex-direction:column;gap:2px;font-size:11px;color:var(--muted);min-width:0}
+.mini input,.mini select{color:var(--ink)}
+.item.ed{flex-wrap:wrap;gap:8px}
+.ig{flex:1 1 100%;display:grid;grid-template-columns:2fr 1.3fr .7fr 1fr 1.3fr;gap:8px}
+.ifoot{flex:1 1 100%;display:flex;align-items:center;gap:10px}
+.by{color:var(--muted);font-size:12px}
+.pedit{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.pedit .inl{background:var(--bg)}
+@media(max-width:760px){
+ .ig{grid-template-columns:1fr 1fr}.ig .mini:first-child{grid-column:1/-1}
+ .pedit{grid-template-columns:1fr 1fr}
+ .addform .fname,.addform .fnote{grid-column:1/-1}.addform .btn{grid-column:1/-1}
+ .usersel select{max-width:96px}
+ .brand span:last-child{display:none}
+ h1{font-size:23px}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .stats.three .stat b{font-size:15px}
+ .stat b{font-size:18px}
+ .phead{flex-direction:column;align-items:stretch;text-align:right}
+ .ring-wrap{display:flex;justify-content:center}
+ .kpis{grid-template-columns:1fr}
+ .addform{grid-template-columns:1fr 1fr}
+ .addform input[name=name]{grid-column:1/-1}
+ .addform .btn{justify-content:center}
+ .modal{align-items:flex-end;padding:0}
+ .sheet{border-radius:18px 18px 0 0;max-width:none}
+ .brand small{display:none}
+ #adminBtn .lbl{display:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap row between">
+    <a class="brand" href="#/" data-act="home">
+      <span class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 15 16 5l12 10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 13v14h17V13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><rect x="11" y="19" width="10" height="4" rx="1.5" fill="#33414d" opacity=".35"/></svg></span>
+      <span><b>بُنيان</b><small>متابعة المشاريع العقارية</small></span>
+    </a>
+    <div class="row gap">
+      <label class="usersel" title="الشخص الذي يقوم بالإضافة">👤<select id="userSel" aria-label="الشخص الذي يقوم بالإضافة"></select></label>
+      <button class="iconbtn" id="syncBtn" data-act="sync" aria-label="المزامنة">☁️</button>
+      <button class="iconbtn" data-act="themes" aria-label="الألوان والتصميم" title="الألوان والتصميم">🎨</button>
+      <button class="iconbtn adm" data-act="settings" aria-label="الإعدادات">⚙</button>
+      <button class="btn" id="adminBtn" data-act="admin">🔒 <span class="lbl">دخول المتحكم</span></button>
+    </div>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<div id="modal" class="modal hidden"><div class="sheet" id="modalBody"></div></div>
+<div id="toast"></div>
+
+<script>
+const KEY='bunyan_v3';
+const who=()=>{try{return localStorage.getItem(KEY+'_who')||''}catch(e){return''}};
+const setWho=n=>{try{localStorage.setItem(KEY+'_who',n||'')}catch(e){}};
+const GH_REPO='khaledalhamri93-stack/bunyan-data';// ← اكتب هنا اسم مستودع البيانات بصيغة owner/repo ليظهر تلقائياً لكل المستخدمين
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10);
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=()=>iso(new Date());
+const addDays=(b,n)=>{const d=new Date(b+'T00:00:00');d.setDate(d.getDate()+n);return iso(d)};
+const diffDays=(a,b)=>Math.round((new Date(a+'T00:00:00')-new Date(b+'T00:00:00'))/864e5);
+const LOC='ar-u-nu-latn';
+const AP=()=>db.settings.alertOn===false?null:(+db.settings.alertPct||90);
+function ledAlert(l){const t=+l.total||0,a=AP();if(!t||a===null)return null;const pd=paid(l),pc=pd/t*100;
+ if(pd>t)return{lvl:'over',txt:`قائمة «${esc(l.name)}» تجاوزت المبلغ الإجمالي بـ ${money(pd-t)}`};
+ if(pc>=a)return{lvl:'warn',txt:`قائمة «${esc(l.name)}» وصلت ${Math.round(pc)}% من المبلغ الإجمالي — المتبقي ${money(t-pd)}`};return null}
+const projAlerts=p=>(p.ledgers||[]).map(ledAlert).filter(Boolean);
+const alertsHTML=p=>{const a=projAlerts(p);return a.length?`<div class="alerts">${a.map(x=>`<div class="alert ${x.lvl}">${x.lvl==='over'?'⛔':'⚠️'} ${x.txt}</div>`).join('')}</div>`:''};
+function alertToast(l){const a=l&&ledAlert(l);if(a)setTimeout(()=>toast((a.lvl==='over'?'⛔ ':'⚠️ ')+a.txt.replace(/<[^>]+>/g,'')),400)}
+const fmtD=d=>d?new Date(d+'T00:00:00').toLocaleDateString(LOC,{day:'numeric',month:'short',year:'numeric'}):'—';
+const num=n=>(+n||0).toLocaleString(LOC,{maximumFractionDigits:3});
+const money=n=>num(n)+' '+esc(db.settings.currency);
+
+const TYPES={build:{label:'بناء',icon:'🏗️'},renov:{label:'ترميم',icon:'🛠️'},buy:{label:'شراء وبيع',icon:'🏷️'}};
+const CATS=['مواد','عمالة','رسوم وتراخيص','معدات','أثاث وتجهيزات','دفعات الشراء','أخرى'];
+const TPL={
+ build:[['استخراج التراخيص والموافقات',21],['اعتماد المخططات الهندسية',14],['تجهيز الموقع والحفر',10],['الأساسات والقواعد',21],['الهيكل الخرساني',45],['أعمال البناء (الطابوق)',30],['التمديدات الكهربائية والصحية',21],['اللياسة والعزل',21],['التشطيبات الداخلية',40],['الواجهات والأعمال الخارجية',21],['الفحص النهائي والتسليم',7]],
+ renov:[['المعاينة وتقييم الحالة',3],['إعداد خطة الترميم والميزانية',7],['الهدم والإزالة',7],['معالجة الهيكل والتشققات',14],['تجديد التمديدات',14],['العزل المائي والحراري',7],['اللياسة والدهان',14],['الأرضيات والبلاط',10],['التركيبات والإنارة',7],['التنظيف والتسليم',3]],
+ buy:[['تحديد الميزانية وخيارات التمويل',7],['البحث عن العقار المناسب',30],['المعاينة والفحص الفني',7],['التفاوض على السعر',7],['دفع العربون وتوقيع العقد المبدئي',3],['إجراءات التمويل البنكي',21],['التثمين والتسجيل العقاري',14],['نقل الملكية واستلام المفاتيح',5],['تقييم سعر البيع',7],['التسويق والإعلان عن العقار',21],['استقبال العروض والتفاوض مع المشتري',14],['توقيع عقد البيع واستلام العربون',3],['نقل الملكية للمشتري واستلام المبلغ',14]]
+};
+function tplSteps(type,start){let d=start||today();return TPL[type].map(([t,n])=>{const s={id:uid(),title:t,date:addDays(d,n),done:false,doneDate:'',note:''};d=s.date;return s})}
+
+function seed(){
+ const C=[["التكسير والتنظيف","15/3",200],["المقاول","19/3",200],["المقاول","27/3",300],["المقاول","30/3",200],["المقاول","2/4",300],["المقاول","4/4",100],["المقاول","9/4",500],["المقاول","12/4",100],["المقاول","16/4",300],["المقاول","19/4",200],["المقاول","24/4",300],["المقاول","27/4",100],["المقاول","29/4",300],["المقاول","4/5",100],["المقاول","7/5",317.5],["المقاول","11/5",100],["المقاول","13/5",27],["المقاول","14/5",300],["المقاول","18/5",5],["المقاول","18/5",100],["المقاول","22/5",140],["المقاول","24/5",100],["المقاول","27/5",100],["المقاول","30/5",20],["المقاول","3/6",100],["المقاول","6/6",40],["المقاول","7/6",50]],M=[["الرمل","22/3",50],["الطابوق","22/3",152],["حديد للنوافذ","24/3",10],["طن كنكري","25/3",30],["حديد","28/3",12.3],["اسمنت ورمل","28/3",52],["550 طابوقة","29/3",129.5],["عمود حديد","29/3",9],["خشب وبليوت","30/3",215],["كنكري وصبية","1/4",52],["اسمنت ورمل","1/4",51],["أغراض بايفيتر وأغطية كهرباء","3/4",96],["طنين كنكري","3/4",22],["اسمنت وحديد","5/4",56],["بكسات سويشات كهرباء","5/4",7.3],["رمل وجرس حديد","6/4",24.7],["اسمنت وحديد","7/4",37],["450 طابوقة","8/4",111],["سكسويل رمل","8/4",22],["وايرات كهرباء","9/4",135],["أدوات بايفيتر","9/4",63],["وايرات المكيفات","11/4",56.7],["وايرات كهرباء","11/4",16.3],["جبس وأغراض جبس","11/4",339.76],["20 كيس أسمنت","12/4",32],["بيبات للوايرات وكنكتات","12/4",8],["قاشي وسكرتنق","12/4",839],["رمل وسوكيتات","13/4",24],["وايرات مقاس 2.5 إنج","13/4",26.4],["واتربروف","13/4",152],["هانقر حديد الجبس","14/4",13],["تحويل الاسم","16/4",81],["المكتب العقاري الدلال","16/4",470],["واتر بروف رولة وحدة","16/4",14],["بيبات كهرباء ومسامير جبس","18/4",10],["أسلاك كهرباء","18/4",16.5],["وايرات كهرباء الدور الأرضي","18/4",49.5],["برايمر ومعجون","18/4",140],["بوكسات كهرباء","18/4",4.5],["وايرات كهرباء","20/4",75.35],["سكسويل رمل","20/4",22],["اسمنت","20/4",32],["سكسويل رمل","21/4",22],["اسمنت وقلو قاشي","22/4",9.5],["15 كيس اسمنت","23/4",24],["سكسويل رمل","25/4",22],["صبغ وأندركوت الجبس","25/4",70.4],["مواسير كهرباء","28/4",19.25],["جبس","28/4",33],["20 كيس اسمنت","29/4",33],["حاوية","29/4",18],["رمل للقاشي","29/4",22],["مقدم للألمنيوم والدرايش","29/4",500],["صبغ برع البيت","1/5",120],["20 كيس اسمنت","2/5",33],["طابوق","3/5",42],["سكسويل رمل","3/5",22],["بايفيتر","3/5",17],["توصيل توكيل","3/5",20],["قلو وقراوت للقاشي","4/5",25.95],["قلو للقاشي","4/5",4.6],["مواد بايفيتر","4/5",77],["معجون","5/5",9.5],["صبغ داخلي","6/5",105],["محول كهرباء","6/5",3.5],["اسمنت بورد خارجي","6/5",61.545],["20 كيس اسمنت وسكسويل رمل","6/5",55],["توصيل اسمنت بورد","6/5",6],["أغراض بايفيتر","6/5",35],["كليبات جبس","7/5",5.1],["قاشي حوش","9/5",140],["قلو قاشي + ممسحة","10/5",21.4],["عازل أرضي","10/5",5],["مع صاحب الألمنيوم في المشتريات","10/5",400],["100 طابوقة","10/5",30],["20 كيس اسمنت وبيبات قزوز فان وأغراضهم","12/5",56.5],["سكسويل رمل","12/5",22],["صبغ ومعجون","13/5",71.5],["مواد بايفيتر","13/5",29],["كور مروحة شفط","13/5",4.9],["بيبات كهرباء","13/5",13],["صبغ خارجي","14/5",114],["مسامير","14/5",2],["حاوية","14/5",18],["كليبات بايفيتر","14/5",8],["75 ليت","15/5",41],["شانيل جبس","16/5",5],["بربر معدات","16/5",6],["العمال اللي شالو المخزن فس السطح","16/5",35],["معجون وقلو","17/5",39],["قاشي الدرج","17/5",57],["كليبات","17/5",8.5],["سكسويل رمل و20 كيس اسمنت","18/5",56],["قلو قاشي","19/5",11.5],["شغل طبلون الكهرباء","19/5",21],["سكسويل رمل","21/5",22],["قاشي","21/5",40.9],["بليوت حق الدي بي","21/5",38],["اسمنت وأغراض بايفيتر","22/5",72.6],["غدا العمال","23/5",5],["سكسويل رمل","24/5",22],["تنظيف الخشب","24/5",10],["تنظيف","25/5",6],["برايمر وأغراض بايفيتر","26/5",36.1],["اسمنت","26/5",16.5],["نقل سقالات","26/5",5],["بيبات","27/5",9.3],["وايرات كهرباء 3 فيس","30/5",65],["مع الكهربائي","30/5",20],["اسمنت ورمل","31/5",56],["أغراض الكهربائي","31/5",8],["مع الكهربائي ولير","31/5",32],["مع صاحب الألمنيوم","31/5",250],["معجون وبرايمر ومراوح شفط وأغراض للكهربائي","2/6",65],["بيبات ألمنيوم للمراوح","2/6",2],["مع الكهربائي","2/6",20],["أغراض للبايفيتر","3/6",32.9],["ألمنيوم البلكونة","3/6",130],["الثين دي في للكهرباء","3/6",115],["مع عامل الجبس","3/6",15],["مع الكهربائي","4/6",20],["سخانات ودينمو وأغراض بايفيتر","4/6",323.5],["عامل البايفيتر","4/6",17],["صبغ ومعجون وبروش","6/6",58],["أغراض البايفيتر","6/6",11],["إزالة السقالات","6/6",6],["تفصيل رقم للبيت","6/6",15],["جرس الباب + واير 14 متر","6/6",15],["قلو","7/6",1],["غطي مجاري + سبيسر قاشي","7/6",7],["شغل قاشي يومين","8/6",28],["شغل بايفيتر يومين","9/6",34],["مع صاحب الألمنيوم","9/6",300],["تسجيل البيت ملكية العقار","9/6",800],["عازل ماء","10/6",7.5],["صبغ وقلو","10/6",18.9]],A=[["مقدم للألمنيوم والدرايش","29/4",500],["مع صاحب الألمنيوم","10/5",400],["مع صاحب الألمنيوم","31/5",250],["ألمنيوم البلكونة","3/6",130],["مع صاحب الألمنيوم","9/6",300]];
+ const mk=a=>a.map(([n,d,v])=>{const[dd,mm]=d.split('/');return{id:uid(),name:n,date:'2026-'+mm.padStart(2,'0')+'-'+dd.padStart(2,'0'),amount:'',start:'',end:'',note:'',by:''}});
+ const start='2026-03-15';
+ return {settings:{currency:'د.ب',pin:'',people:['المالك','المقاول'],currentUser:'المالك'},projects:[
+  {id:uid(),name:'بيت مدينة عيسى 1',type:'renov',location:'مدينة عيسى',start,end:'',by:'المالك',steps:tplSteps('renov',start).map(x=>({...x,by:'المالك'})),ledgers:[
+   {id:uid(),name:'المقاول',total:0,note:'',entries:mk(C)},
+   {id:uid(),name:'مواد البناء',total:0,note:'',entries:mk(M)},
+   {id:uid(),name:'الألمنيوم',total:0,note:'',entries:mk(A)}]}]};
+}
+const L5=['المقاول','الألمنيوم','التشطيب','الخشب','المواد'];
+const defL=()=>(db.settings.defLedgers&&db.settings.defLedgers.length)?db.settings.defLedgers:L5;
+const KW={'الخشب':/خشب|بليوت/,'التشطيب':/صبغ|معجون|برايمر|أندركوت|قاشي|قلو|قراوت|جبس|ممسحة|عازل|واتر ?بروف|سكرتنق/};
+function split5(p){if(p.split5)return;p.split5=true;
+ const mk=n=>({id:uid(),name:n,total:0,note:'',entries:[]});
+ const old=p.ledgers.find(l=>l.name==='مواد البناء');if(old&&!p.ledgers.some(l=>l.name==='المواد'))old.name='المواد';
+ L5.forEach(n=>{if(!p.ledgers.some(l=>l.name===n))p.ledgers.push(mk(n))});
+ const g=n=>p.ledgers.find(l=>l.name===n),mat=g('المواد'),alu=g('الألمنيوم');
+ mat.entries=mat.entries.filter(e=>{
+  if(/ألمنيوم|الألمنيوم/.test(e.name)&&!/بيبات/.test(e.name)){const d=alu.entries.find(x=>x.date===e.date);
+   if(d){if((d.amount===''||d.amount==null)&&e.amount!==''&&e.amount!=null)d.amount=e.amount;return false}
+   alu.entries.push(e);return false}
+  for(const k in KW)if(KW[k].test(e.name)){g(k).entries.push(e);return false}
+  return true});
+ Object.values(p.ledgers).forEach(l=>l.entries.sort((a,b)=>(a.date||'').localeCompare(b.date||'')));
+ p.ledgers.sort((a,b)=>{const i=L5.indexOf(a.name),j=L5.indexOf(b.name);return(i<0?99:i)-(j<0?99:j)})}
+function migrate(){db.settings.people=db.settings.people||['المالك'];delete db.settings.currentUser;
+ db.projects.forEach(p=>{if(!p.ledgers){p.ledgers=[{id:uid(),name:'المصروفات',total:+p.budget||0,note:'',entries:(p.items||[]).map(i=>({id:i.id||uid(),name:i.name,date:i.date||'',amount:(+i.qty||0)*(+i.price||0),start:'',end:'',note:'',by:i.by||''}))}]}delete p.items;delete p.budget;split5(p)})}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}if(syncReady&&ghOn()){dirty=true;try{localStorage.setItem(KEY+'_dirty','1')}catch(e){}schedulePush()}}
+let db=load()||seed();if(!who()&&db.settings&&db.settings.people&&db.settings.people[0])setWho(db.settings.people[0]);
+migrate();
+save();
+
+const byLine=(o)=>[o.by&&`👤 أضافه: ${esc(o.by)}`,o.editedBy&&`✎ آخر تعديل: ${esc(o.editedBy)}`].filter(Boolean).join(' · ');
+let view={page:'home',pid:null,tab:'steps',filter:'all'};
+let admin=false;try{admin=sessionStorage.getItem(KEY+'_adm')==='1'}catch(e){}
+let modalSubmit=null;
+
+const cur=()=>db.projects.find(p=>p.id===view.pid);
+const prog=p=>p.steps.length?Math.round(p.steps.filter(s=>s.done).length/p.steps.length*100):0;
+const FS={doing:['جاري التنفيذ','blue','⏳'],done:['تم التنفيذ','ok','✓'],late:['متأخر','late','⚠']};
+const fsSel=(e,attrs)=>`<select class="inl fs fs-${e.status||'none'}" ${attrs}><option value="">— اختر —</option>${Object.entries(FS).map(([k,[l,,i]])=>`<option value="${k}" ${e.status===k?'selected':''}>${i} ${l}</option>`).join('')}</select>`;
+const fsPill=e=>e.status&&FS[e.status]?`<span class="pill ${FS[e.status][1]}">${FS[e.status][2]} ${FS[e.status][0]}</span>`:'<span class="muted">—</span>';
+const paid=l=>l.entries.reduce((a,e)=>a+(+e.amount||0),0);
+const spent=p=>(p.ledgers||[]).reduce((a,l)=>a+paid(l),0);
+const nextStep=p=>p.steps.find(s=>!s.done);
+const lateCount=p=>p.steps.filter(s=>!s.done&&s.date&&s.date<today()).length;
+const lastDoneIdx=p=>{let k=-1;p.steps.forEach((s,i)=>{if(s.done)k=i});return k};
+function st(p,s){if(s.done)return'done';if(s.date&&s.date<today())return'late';return s===nextStep(p)?'current':'upcoming'}
+const ST={done:['مكتملة','ok'],late:['متأخرة','late'],current:['جارية الآن','blue'],upcoming:['قادمة','muted']};
+const stat=(l,v,c='')=>`<div class="stat ${c}"><span>${l}</span><b>${v}</b></div>`;
+const rel=d=>{const x=diffDays(d,today());return x<0?`<span class="late-t">متأخرة ${-x} يوم</span>`:x===0?'موعدها اليوم':`بعد ${x} يوم`};
+
+function ring(pct,size=128){const r=(size-14)/2,c=2*Math.PI*r,o=c*(1-pct/100),h=size/2;
+ return `<svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${h}" cy="${h}" r="${r}" class="ring-bg"/><circle cx="${h}" cy="${h}" r="${r}" class="ring-fg" stroke-dasharray="${c}" stroke-dashoffset="${o}" transform="rotate(-90 ${h} ${h})"/><text x="${h}" y="${h-2}" text-anchor="middle" dominant-baseline="middle" font-size="28">${pct}%</text><text x="${h}" y="${h+24}" text-anchor="middle" font-size="12" style="fill:var(--muted);font-weight:500">نسبة الإنجاز</text></svg>`}
+
+function renderHome(){
+ const all=db.projects,ps=all.filter(p=>view.filter==='all'||p.type===view.filter);
+ const avg=all.length?Math.round(all.reduce((a,p)=>a+prog(p),0)/all.length):0;
+ const tSp=all.reduce((a,p)=>a+spent(p),0),tL=all.reduce((a,p)=>a+lateCount(p),0);
+ return `<section class="hero"><div><h1>مشاريعك العقارية</h1><p>تابع مراحل البناء والترميم وشراء وبيع العقارات، واحسب التكاليف، وراقب نسبة الإنجاز في مكان واحد.</p></div><button class="btn primary adm" data-act="newProject">＋ مشروع جديد</button></section>
+ <section class="stats">${stat('عدد المشاريع',all.length)}${stat('متوسط الإنجاز',avg+'%')}${stat('إجمالي المدفوعات',money(tSp))}${stat('مراحل متأخرة',tL,tL?'late':'ok')}</section>
+ <div class="chips">${[['all','الكل'],...Object.entries(TYPES).map(([k,v])=>[k,v.icon+' '+v.label])].map(([k,l])=>`<button class="chip ${view.filter===k?'on':''}" data-act="filter" data-v="${k}">${l}</button>`).join('')}</div>
+ ${ps.length?`<section class="grid">${ps.map(card).join('')}</section>`:`<div class="empty">لا توجد مشاريع هنا بعد.${admin?'':'<br>ادخل كمتحكم لإضافة مشروع.'}<div class="row center adm"><button class="btn primary" data-act="newProject">＋ مشروع جديد</button></div></div>`}`;
+}
+function card(p){const pg=prog(p),n=nextStep(p),sp=spent(p),lt=lateCount(p),T=TYPES[p.type];
+ return `<article class="card" data-act="open" data-id="${p.id}">
+ <div class="card-top"><span class="ticon t-${p.type}">${T.icon}</span><div class="grow"><h3>${esc(p.name)}</h3><small>${T.label}${p.location?' · '+esc(p.location):''}</small></div>${lt?`<span class="pill late">${lt} متأخرة</span>`:''}${(()=>{const a=projAlerts(p);return a.some(x=>x.lvl==='over')?'<span class="pill late">⛔ تجاوز مبلغ</span>':a.length?'<span class="pill warn">⚠️ قارب المبلغ</span>':''})()}<button class="cdel adm" data-act="delProject" data-id="${p.id}" title="مسح المشروع" aria-label="مسح المشروع">🗑</button></div>
+ <div><div class="row between"><b class="pct">${pg}%</b><small class="muted">${p.steps.filter(s=>s.done).length} من ${p.steps.length} مراحل</small></div><div class="pbar"><div style="width:${pg}%"></div></div></div>
+ <div class="next">${n?`<span>المرحلة التالية</span><b>${esc(n.title)}</b><small class="muted">${fmtD(n.date)}</small>`:p.steps.length?`<b class="okt">✓ اكتمل المشروع</b>`:`<span>لم تُحدد المراحل بعد</span>`}</div>
+ <div class="row between money"><span>إجمالي المدفوعات</span><b>${money(sp)}</b></div></article>`}
+
+function renderProject(){const p=cur();if(!p){view.page='home';return renderHome()}
+ const pg=prog(p),n=nextStep(p),sp=spent(p),T=TYPES[p.type],done=p.steps.filter(s=>s.done).length;
+ return `<div class="crumbs"><button class="btn ghost" data-act="home">→ كل المشاريع</button><div class="row gap"><button class="btn ghost" data-act="reports">📄 التقارير</button><div class="adm row gap"><button class="btn ghost" data-act="editProject">✎ تعديل</button><button class="btn delbtn" data-act="delProject" data-id="${p.id}">🗑 مسح المشروع</button></div></div></div>
+ <section class="phead"><div class="ring-wrap">${ring(pg)}</div><div class="grow"><span class="pill ${p.type}">${T.icon} ${T.label}</span><h1>${esc(p.name)}</h1>
+ <p class="muted small" style="margin:0">${[p.location&&esc(p.location),p.start&&'البدء '+fmtD(p.start),p.end&&'التسليم المستهدف '+fmtD(p.end)].filter(Boolean).join(' · ')}</p>
+ ${admin?`<div class="pedit"><label class="mini"><span>تاريخ البدء</span><input class="inl" type="date" data-edit="project" data-f="start" value="${p.start||''}"></label><label class="mini"><span>التسليم المستهدف</span><input class="inl" type="date" data-edit="project" data-f="end" value="${p.end||''}"></label></div>`:''}
+ <div class="kpis"><div><span>المراحل المنجزة</span><b>${done} / ${p.steps.length}</b></div><div><span>المرحلة التالية</span><b>${n?esc(n.title):'—'}</b><small>${n&&n.date?fmtD(n.date)+' · '+rel(n.date):''}</small></div><div><span>إجمالي المدفوعات</span><b>${money(sp)}</b><small>${p.ledgers.length} أقسام حسابات</small></div></div></div></section>
+ ${alertsHTML(p)}
+ <nav class="tabs"><button class="${view.tab==='steps'?'on':''}" data-act="tab" data-v="steps">📋 مراحل العمل</button><button class="${view.tab==='costs'?'on':''}" data-act="tab" data-v="costs">💳 الحسابات والدفعات</button></nav>
+ ${view.tab==='steps'?renderSteps(p):renderCosts(p)}`}
+
+function renderSteps(p){
+ if(!p.steps.length)return `<div class="empty">لا توجد مراحل عمل بعد.<div class="adm row gap center"><button class="btn primary" data-act="loadTpl">تحميل خطوات ${TYPES[p.type].label} الجاهزة</button><button class="btn" data-act="addStep">＋ مرحلة</button></div></div>`;
+ const nx=nextStep(p),ld=lastDoneIdx(p);
+ return `<div class="row between mb wrapf"><p class="muted small" style="margin:0">تُنجز المراحل بالترتيب، وتُحسب نسبة الإنجاز تلقائياً.${admin?' اضغط رقم المرحلة لإكمالها.':''}</p><button class="btn primary adm" data-act="addStep">＋ مرحلة</button></div>
+ <ol class="timeline">${p.steps.map((s,i)=>{const k=st(p,s),[lab,cls]=ST[k],can=s.done?i===ld:s===nx;
+  return `<li class="step s-${k}"><button class="tick" data-act="toggle" data-id="${s.id}" ${admin&&can?'':'disabled'} title="${s.done?'إلغاء الإكمال':'إكمال المرحلة'}">${s.done?'✓':i+1}</button>
+  <div class="sbody"><div class="row between gap">${admin?`<input class="inl ttl grow" data-edit="step" data-id="${s.id}" data-f="title" value="${esc(s.title)}">`:`<h4>${esc(s.title)}</h4>`}<span class="pill ${cls}">${lab}</span></div>
+  <div class="meta">${admin?`<label class="ifield">📅 الموعد<input class="inl" type="date" data-edit="step" data-id="${s.id}" data-f="date" value="${s.date||''}"></label>${s.done?`<label class="ifield">✓ أُنجزت<input class="inl" type="date" data-edit="step" data-id="${s.id}" data-f="doneDate" value="${s.doneDate||''}"></label>`:''}`:`<span>📅 ${fmtD(s.date)}</span>${s.done?`<span>✓ أُنجزت ${fmtD(s.doneDate)}</span>`:''}`}${!s.done&&s.date?`<span>${rel(s.date)}</span>`:''}</div>
+  ${s.by||s.doneBy||s.editedBy?`<div class="meta by">${[byLine(s),s.doneBy&&`✓ أكملها: ${esc(s.doneBy)}`].filter(Boolean).join(' · ')}</div>`:''}
+  ${s.note?`<p class="note">${esc(s.note)}</p>`:''}
+  <div class="sact adm"><button data-act="up" data-id="${s.id}" ${i===0?'disabled':''}>▲</button><button data-act="down" data-id="${s.id}" ${i===p.steps.length-1?'disabled':''}>▼</button><button data-act="editStep" data-id="${s.id}">تعديل</button><button class="danger" data-act="delStep" data-id="${s.id}">حذف</button></div></div></li>`}).join('')}</ol>`}
+
+function renderCosts(p){
+ if(!p.ledgers.length)return `<div class="empty">لا توجد أقسام حسابات بعد.<div class="adm row center"><button class="btn primary" data-act="addLedger">＋ قسم جديد</button></div></div>`;
+ const l=p.ledgers.find(x=>x.id===view.lid)||p.ledgers[0];view.lid=l.id;
+ const pd=paid(l),t=+l.total||0,rem=t-pd;let run=0;
+ const E=f=>e=>`data-edit="entry" data-id="${e.id}" data-f="${f}"`;
+ const sf=view.sf||'all',cnt=k=>l.entries.filter(e=>(e.status||'')===k).length;
+ const rows=l.entries.map((e,i)=>{run+=(+e.amount||0);if(sf!=='all'&&(e.status||'')!==sf)return'';const r=t-run,rc=t?`<td class="${r<0?'neg':''}">${num(r)}</td>`:'<td class="muted">—</td>';
+  return admin?`<tr><td class="seq">${i+1}</td><td><input class="inl wname" ${E('name')(e)} value="${esc(e.name)}">${e.by?`<small class="by">👤 ${esc(e.by)}</small>`:''}</td><td><input class="inl" type="date" ${E('date')(e)} value="${e.date||''}"></td><td><input class="inl wnum" type="number" min="0" step="any" ${E('amount')(e)} placeholder="أدخل المبلغ" value="${e.amount??''}"></td><td><input class="inl" type="date" ${E('start')(e)} value="${e.start||''}"></td><td><input class="inl" type="date" ${E('end')(e)} value="${e.end||''}"></td>${rc}<td>${num(run)}</td><td>${fsSel(e,E('status')(e))}</td><td><input class="inl" ${E('note')(e)} value="${esc(e.note||'')}"></td><td class="ract"><select class="inl mv" data-id="${e.id}" title="نقل إلى قائمة أخرى"><option value="">↔ نقل</option>${p.ledgers.filter(x=>x!==l).map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('')}</select><button class="rdel" data-act="delEntry" data-id="${e.id}" aria-label="حذف">✕</button></td></tr>`
+  :`<tr><td class="seq">${i+1}</td><td>${esc(e.name)}${e.by?`<small class="by">👤 ${esc(e.by)}</small>`:''}</td><td>${fmtD(e.date)}</td><td><b>${e.amount===''||e.amount==null?'—':num(e.amount)}</b></td><td>${e.start?fmtD(e.start):''}</td><td>${e.end?fmtD(e.end):''}</td>${rc}<td>${num(run)}</td><td>${fsPill(e)}</td><td>${esc(e.note||'')}</td></tr>`}).join('');
+ return `<div class="lsum">${p.ledgers.map(x=>{const xp=paid(x),xt=+x.total||0;return `<button class="lcard ${x===l?'on':''}" data-act="ledger" data-id="${x.id}"><span>${esc(x.name)}</span><b>${money(xp)}</b>${xt?`<div class="pbar thin ${xp>xt?'over':''}"><div style="width:${Math.min(100,xp/xt*100)}%"></div></div><small class="${xp>xt?'late-t':''}">${xp>xt?'تجاوز '+money(xp-xt):'المتبقي '+money(xt-xp)}</small>`:'<small>بدون مبلغ إجمالي</small>'}</button>`}).join('')}<button class="lcard add adm" data-act="addLedger">＋ قسم جديد</button></div>
+ <section class="lhead"><div class="grow">${admin?`<input class="inl ttl" data-edit="ledger" data-id="${l.id}" data-f="name" value="${esc(l.name)}">`:`<h2>${esc(l.name)}</h2>`}</div><button class="btn ghost danger adm" data-act="delLedger" data-id="${l.id}">حذف القسم</button></section>
+ <section class="stats three">${admin?`<label class="stat"><span>المبلغ الإجمالي</span><input class="inl bigin" type="number" min="0" step="any" placeholder="غير محدد" data-edit="ledger" data-id="${l.id}" data-f="total" value="${t||''}"></label>`:stat('المبلغ الإجمالي',t?money(t):'غير محدد')}${stat('إجمالي المدفوعات',money(pd))}${stat('المتبقي',t?money(rem):'—',t?(rem<0?'late':'ok'):'')}</section>
+ ${t?`<div class="pbar big ${pd>t?'over':''}"><div style="width:${Math.min(100,pd/t*100)}%"></div></div><p class="muted small" style="margin:0 0 8px">${Math.round(pd/t*100)}% من المبلغ الإجمالي${pd>t?' — <b class="late-t">تم تجاوز المبلغ بـ '+money(pd-t)+'</b>':''}</p>`:''}
+ ${admin?`<label class="lnote"><span>ملاحظات القسم</span><input class="inl" data-edit="ledger" data-id="${l.id}" data-f="note" value="${esc(l.note||'')}" placeholder="أي ملاحظة عامة على هذا القسم"></label>`:l.note?`<p class="note">${esc(l.note)}</p>`:''}
+ <form id="entryForm" class="addform adm" autocomplete="off">
+  <label class="mini fname"><span>المهمة / الغرض</span><input name="name" required></label>
+  <label class="mini"><span>التاريخ</span><input name="date" type="date" value="${today()}" required></label>
+  <label class="mini"><span>المبلغ</span><input name="amount" type="number" min="0" step="any" required></label>
+  <label class="mini"><span>تاريخ البدء</span><input name="start" type="date"></label>
+  <label class="mini"><span>تاريخ التسليم</span><input name="end" type="date"></label>
+  <label class="mini"><span>المتابعة</span>${fsSel({status:'doing'},'name="status"')}</label>
+  <label class="mini fnote"><span>ملاحظات</span><input name="note"></label>
+  <button class="btn primary">＋ إضافة</button>
+ </form>
+ <div class="chips fchips">${[['all','الكل',l.entries.length],...Object.entries(FS).map(([k,[lb,,ic]])=>[k,ic+' '+lb,cnt(k)]),['','بدون متابعة',cnt('')]].map(([k,lb,c])=>`<button class="chip ${sf===k?'on':''} ${k?'c-'+k:''}" data-act="sfilter" data-v="${k}">${lb} <b>${c}</b></button>`).join('')}</div>
+ <div class="tbl"><table><thead><tr><th>التسلسل</th><th>المهمة</th><th>التاريخ</th><th>المبلغ</th><th>تاريخ البدء</th><th>تاريخ التسليم</th><th>المتبقي</th><th>إجمالي المدفوعات</th><th>المتابعة</th><th>ملاحظات</th>${admin?'<th></th>':''}</tr></thead>
+ <tbody>${rows||`<tr><td colspan="11" class="muted" style="text-align:center;padding:24px">${sf==='all'?'لا توجد مدفوعات في هذا القسم بعد.':'لا توجد بنود بهذه الحالة.'}</td></tr>`}</tbody>
+ ${l.entries.length?`<tfoot><tr><td colspan="3">إجمالي المدفوعات لـ${esc(l.name)}</td><td>${num(pd)}</td><td colspan="${admin?7:6}"></td></tr></tfoot>`:''}</table></div>`}
+function render(){$('#app').innerHTML=view.page==='project'?renderProject():renderHome();applyAdmin();renderUsers()}
+function renderUsers(){const s=$('#userSel'),ps=db.settings.people;
+ s.innerHTML=`<option value="" ${who()?'':'selected'} disabled>اختر اسمك</option>`+ps.map(n=>`<option ${n===who()?'selected':''}>${esc(n)}</option>`).join('')+`<option value="__add">＋ إضافة شخص</option>`}
+function addPerson(){modal('إضافة شخص',`<label>الاسم<input name="n" required placeholder="مثلاً: المهندس خالد"></label>`,d=>{const n=d.n.trim();if(!n)return false;if(!db.settings.people.includes(n))db.settings.people.push(n);setWho(n);save();renderUsers();toast('تمت إضافة '+n)},'إضافة')}
+const needUser=()=>{if(who())return false;toast('اختر اسمك من القائمة في الأعلى أولاً');$('#userSel').focus();return true};
+function applyAdmin(){document.body.classList.toggle('is-admin',admin);$('#adminBtn').innerHTML=admin?'🔓 <span class="lbl">خروج المتحكم</span>':'🔒 <span class="lbl">دخول المتحكم</span>';try{sessionStorage.setItem(KEY+'_adm',admin?'1':'0')}catch(e){}}
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2200)}
+function route(){const m=location.hash.match(/^#\/p\/(\w+)/);
+ if(m&&db.projects.some(p=>p.id===m[1])){if(view.pid!==m[1]){view.tab='steps';view.lid=null}view.page='project';view.pid=m[1]}else{view.page='home';view.pid=null}
+ render();window.scrollTo(0,0)}
+const go=pid=>{location.hash=pid?'#/p/'+pid:'#/'};
+
+function modal(title,body,onSubmit,label='حفظ'){
+ $('#modalBody').innerHTML=`<form id="mf" autocomplete="off"><div class="mhead"><h3>${title}</h3><button type="button" class="x" data-act="closeModal">✕</button></div><div class="mcontent">${body}</div>${onSubmit?`<div class="mfoot"><button type="button" class="btn ghost" data-act="closeModal">إلغاء</button><button class="btn primary">${label}</button></div>`:''}</form>`;
+ modalSubmit=onSubmit;$('#modal').classList.remove('hidden');setTimeout(()=>{const f=$('#mf .mcontent input');f&&f.focus()},60)}
+const closeModal=()=>{$('#modal').classList.add('hidden');modalSubmit=null;renderUsers()};
+
+function projectForm(p){const e=!!p;p=p||{name:'',type:'build',location:'',budget:'',start:today(),end:''};
+ modal(e?'تعديل المشروع':'مشروع جديد',`
+ <label>اسم المشروع<input name="name" required value="${esc(p.name)}" placeholder="مثلاً: منزل الرفاع"></label>
+ <label>نوع المشروع<select name="type">${Object.entries(TYPES).map(([k,v])=>`<option value="${k}" ${p.type===k?'selected':''}>${v.icon} ${v.label}</option>`).join('')}</select></label>
+ <label>الموقع<input name="location" value="${esc(p.location)}"></label>
+ <div class="two"><label>تاريخ البدء<input name="start" type="date" value="${p.start||''}"></label><label>التسليم المستهدف<input name="end" type="date" value="${p.end||''}"></label></div>
+ ${e?'':'<label class="check"><input type="checkbox" name="tpl" checked> تحميل خطوات العمل الجاهزة حسب نوع المشروع، مع توزيع التواريخ تلقائياً من تاريخ البدء (يمكنك تعديلها لاحقاً)</label>'}`,d=>{
+  const f={name:d.name,type:d.type,location:d.location,start:d.start,end:d.end};
+  if(e){Object.assign(p,f,{editedBy:who()});save();render()}
+  else{const np={id:uid(),...f,by:who(),steps:d.tpl?tplSteps(d.type,d.start).map(s=>({...s,by:who()})):[],ledgers:defL().map(n=>({id:uid(),name:n,total:0,note:'',entries:[]})),split5:true};if(!np.end&&np.steps.length)np.end=np.steps[np.steps.length-1].date;db.projects.unshift(np);save();go(np.id)}
+  toast('تم الحفظ')})}
+
+function stepForm(s){const p=cur(),e=!!s;const last=p.steps[p.steps.length-1];
+ s=s||{title:'',date:last&&last.date?addDays(last.date,7):(p.start||today()),note:'',done:false,doneDate:''};
+ modal(e?'تعديل المرحلة':'مرحلة جديدة',`
+ <label>اسم المرحلة / الإجراء<input name="title" required value="${esc(s.title)}"></label>
+ <label>التاريخ المحدد للإنجاز<input name="date" type="date" required value="${s.date||''}"></label>
+ ${e&&s.done?`<label>تاريخ الإنجاز الفعلي<input name="doneDate" type="date" value="${s.doneDate||''}"></label>`:''}
+ ${e?'':`<label>الترتيب<select name="pos"><option value="end">في نهاية القائمة</option>${p.steps.map((x,i)=>`<option value="${i}">قبل: ${i+1}. ${esc(x.title)}</option>`).join('')}</select></label>`}
+ <label>ملاحظات<textarea name="note" rows="3">${esc(s.note)}</textarea></label>`,d=>{
+  if(e){s.title=d.title;s.date=d.date;s.note=d.note;s.editedBy=who();if(d.doneDate!==undefined)s.doneDate=d.doneDate}
+  else{const ns={id:uid(),title:d.title,date:d.date,note:d.note,done:false,doneDate:'',by:who()};d.pos==='end'?p.steps.push(ns):p.steps.splice(+d.pos,0,ns)}
+  save();render();toast('تم الحفظ')})}
+
+function itemForm(it){
+ modal('تعديل البند',`
+ <label>اسم الغرض<input name="name" required value="${esc(it.name)}"></label>
+ <label>الفئة<select name="cat">${CATS.map(c=>`<option ${c===it.cat?'selected':''}>${c}</option>`).join('')}</select></label>
+ <div class="two"><label>الكمية<input name="qty" type="number" min="0" step="any" required value="${it.qty}"></label><label>سعر الوحدة<input name="price" type="number" min="0" step="any" required value="${it.price}"></label></div>`,d=>{
+  Object.assign(it,{name:d.name,cat:d.cat,qty:+d.qty||0,price:+d.price||0,editedBy:who()});save();render();toast('تم الحفظ')})}
+
+const THEMES={"orange": ["برتقالي", "#ec7d32"], "sky": ["أزرق سماوي", "#2f80c8"], "teal": ["فيروزي", "#1f9e9a"], "green": ["أخضر", "#3a9a6a"], "purple": ["بنفسجي", "#7b5cc4"], "rose": ["وردي", "#d4567a"], "gold": ["ذهبي رملي", "#c39424"], "slate": ["رمادي هادئ", "#5b7083"]};
+const STYLES={soft:['ناعم','زوايا دائرية وخلفية شبكية'],sharp:['هندسي','زوايا حادة وخطوط واضحة'],bold:['بارز','شريط ملون وظلال أعمق']};
+function getLook(){try{return JSON.parse(localStorage.getItem('bunyan_look'))||{}}catch(e){return{}}}
+function applyLook(l){l=l||getLook();document.documentElement.dataset.theme=l.theme||'orange';document.documentElement.dataset.style=l.style||'soft'}
+function setLook(k,v){const l=getLook();l[k]=v;try{localStorage.setItem('bunyan_look',JSON.stringify(l))}catch(e){}applyLook(l);themeModal()}
+function themeModal(){const l=getLook(),t=l.theme||'orange',st=l.style||'soft';
+ modal('الألوان والتصميم',`<b style="font-size:14px">لون المنصة</b><div class="thgrid">${Object.entries(THEMES).map(([k,[n,c]])=>`<button type="button" class="thbtn ${k===t?'on':''}" data-act="setTheme" data-v="${k}"><span class="sw" style="background:${c}"></span>${n}</button>`).join('')}</div>
+ <b style="font-size:14px">شكل التصميم</b><div class="stgrid">${Object.entries(STYLES).map(([k,[n,d]])=>`<button type="button" class="stbtn ${k===st?'on':''}" data-act="setStyle" data-v="${k}"><div class="prev ${k}"><i></i><b></b></div>${n}<small>${d}</small></button>`).join('')}</div>
+ <p class="muted small" style="margin:0">يُحفظ اختيارك على هذا الجهاز.</p>`,null)}
+applyLook();
+
+// ===== مزامنة GitHub =====
+const GHK='bunyan_gh',BASEK=KEY+'_base';
+let gh=(()=>{try{return JSON.parse(localStorage.getItem(GHK))||{}}catch(e){return{}}})();
+if(!gh.owner&&GH_REPO.includes('/')){[gh.owner,gh.repo]=GH_REPO.split('/')}
+var ghSha=null,dirty=(()=>{try{return localStorage.getItem(KEY+'_dirty')==='1'}catch(e){return false}})(),pushT=null,busy=false,syncReady=false,pendR=false;
+const ghOn=()=>!!(gh.owner&&gh.repo&&gh.token);
+const b64e=x=>btoa(unescape(encodeURIComponent(x))),b64d=x=>decodeURIComponent(escape(atob(x.replace(/\s/g,''))));
+const ghUrl=()=>`https://api.github.com/repos/${encodeURIComponent(gh.owner)}/${encodeURIComponent(gh.repo)}/contents/${(gh.path||'data.json').split('/').map(encodeURIComponent).join('/')}`;
+const ghReq=(method,body)=>fetch(ghUrl()+(method==='GET'?`?ref=${encodeURIComponent(gh.branch||'main')}&_=${Date.now()}`:''),{method,cache:'no-store',headers:{Authorization:'Bearer '+gh.token,Accept:'application/vnd.github+json'},body:body?JSON.stringify(body):undefined});
+async function ghGet(){const r=await ghReq('GET');if(r.status===404)return{sha:null,data:null};if(!r.ok)throw r.status;const j=await r.json();return{sha:j.sha,data:JSON.parse(b64d(j.content))}}
+const getBase=()=>{try{return JSON.parse(localStorage.getItem(BASEK))}catch(e){return null}};
+const setBase=d=>{try{d?localStorage.setItem(BASEK,JSON.stringify(d)):localStorage.removeItem(BASEK)}catch(e){}};
+const clean=()=>{dirty=false;try{localStorage.removeItem(KEY+'_dirty')}catch(e){}};
+const keepLocal=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}};
+function setGh(st){const M={off:['☁️','المزامنة غير مفعّلة — اضغط لربط GitHub'],ok:['✅','محفوظ ومتزامن مع GitHub'],busy:['🔄','جارٍ الحفظ…'],err:['⚠️','تعذّر الاتصال بـ GitHub — التغييرات محفوظة على جهازك وستُرفع لاحقاً']};const b=$('#syncBtn');if(b){b.textContent=M[st][0];b.title=M[st][1];b.dataset.st=st}}
+// دمج ثلاثي: يحافظ على تعديلات الطرفين
+const isO=x=>x&&typeof x==='object'&&!Array.isArray(x),eq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+function m3(b,l,r){if(eq(l,b))return r;if(eq(r,b)||eq(l,r))return l;
+ if(isO(l)&&isO(r)){const B=isO(b)?b:{},o={};new Set([...Object.keys(l),...Object.keys(r)]).forEach(k=>{const iL=k in l,iR=k in r,iB=k in B;
+  if(iL&&iR)o[k]=m3(B[k],l[k],r[k]);else if(iL){if(!iB||!eq(l[k],B[k]))o[k]=l[k]}else if(!iB||!eq(r[k],B[k]))o[k]=r[k]});return o}
+ if(Array.isArray(l)&&Array.isArray(r)){const B=Array.isArray(b)?b:[],ids=a=>a.every(x=>isO(x)&&x.id);
+  if(ids(l)&&ids(r)){const bm=new Map(B.filter(isO).map(x=>[x.id,x])),lm=new Map(l.map(x=>[x.id,x])),rm=new Map(r.map(x=>[x.id,x])),out=[];
+   r.forEach(x=>{if(lm.has(x.id))out.push(m3(bm.get(x.id),lm.get(x.id),x));else if(!bm.has(x.id)||!eq(bm.get(x.id),x))out.push(x)});
+   l.forEach((x,i)=>{if(!rm.has(x.id)&&!bm.has(x.id)){let pos=0;for(let j=i-1;j>=0;j--){const k=out.findIndex(y=>y.id===l[j].id);if(k>-1){pos=k+1;break}}out.splice(pos,0,x)}});return out}
+  const u=l.filter(x=>!(B.some(y=>eq(y,x))&&!r.some(y=>eq(y,x))));r.forEach(x=>{if(!u.some(y=>eq(y,x))&&!B.some(y=>eq(y,x)))u.push(x)});return u}
+ return l}
+function adopt(data,sha){ghSha=sha;setBase(data);db=data;migrate();keepLocal()}
+function safeRender(){const a=document.activeElement;if(a&&/INPUT|SELECT|TEXTAREA/.test(a.tagName)){pendR=true;return}render()}
+async function pull(notify){if(!ghOn()||busy)return;busy=true;
+ try{const {sha,data}=await ghGet();busy=false;
+  if(!data){syncReady=true;dirty=true;return push()}
+  if(sha===ghSha){syncReady=true;setGh(dirty?'busy':'ok');if(dirty)schedulePush();return}
+  const base=getBase(),before=JSON.stringify(db);
+  if(dirty&&base){ghSha=sha;db=m3(base,db,data);setBase(data);migrate();keepLocal();schedulePush()}
+  else{adopt(data,sha);clean();setGh('ok')}
+  syncReady=true;if(JSON.stringify(db)!==before){safeRender();if(notify)toast('🔄 وصلت تحديثات جديدة')}}
+ catch(e){busy=false;setGh('err');if(e===401||e===403||e===404)toast('تحقق من رمز GitHub وصلاحية الوصول للمستودع')}}
+function schedulePush(){clearTimeout(pushT);setGh('busy');pushT=setTimeout(push,1200)}
+async function push(){if(!ghOn())return;if(busy){schedulePush();return}busy=true;setGh('busy');
+ try{for(let i=0;i<4;i++){const {sha,data}=await ghGet(),base=getBase();
+   if(data&&!base){adopt(data,sha);clean();busy=false;setGh('ok');render();return}
+   const out=data&&sha!==ghSha?m3(base,db,data):db;
+   const r=await ghReq('PUT',{message:'تحديث من '+(who()||'مستخدم'),content:b64e(JSON.stringify(out,null,1)),branch:gh.branch||'main',...(sha?{sha}:{})});
+   if(r.ok){const j=await r.json(),changed=!eq(out,db);ghSha=j.content.sha;setBase(out);db=out;keepLocal();clean();busy=false;setGh('ok');if(changed)safeRender();return}
+   if(r.status!==409&&r.status!==422)throw r.status}
+  throw 'conflict'}
+ catch(e){busy=false;setGh('err');if(e===401||e===403||e===404)toast('تحقق من رمز GitHub وصلاحية الوصول للمستودع')}}
+function syncModal(){modal('المزامنة مع GitHub',`
+ <p class="muted small" style="margin:0">البيانات تُحفظ في ملف داخل مستودع GitHub خاص، ولا يفتحها إلا من لديه صلاحية على المستودع ورمز دخول.</p>
+ <div class="two"><label>صاحب المستودع<input name="owner" required value="${esc(gh.owner||'')}" placeholder="username" dir="ltr"></label><label>اسم المستودع<input name="repo" required value="${esc(gh.repo||'')}" placeholder="bunyan-data" dir="ltr"></label></div>
+ <label>رمز الدخول (Token)<input name="token" type="password" ${gh.token?'':'required'} placeholder="${gh.token?'محفوظ — اتركه فارغاً للإبقاء عليه':'ghp_…'}" dir="ltr"></label>
+ <div class="two"><label>الملف<input name="path" value="${esc(gh.path||'data.json')}" dir="ltr"></label><label>الفرع<input name="branch" value="${esc(gh.branch||'main')}" dir="ltr"></label></div>
+ ${ghOn()?`<button type="button" class="btn danger" data-act="ghOff">فصل المزامنة على هذا الجهاز</button>`:''}
+ <p class="muted small" style="margin:0">عند أول ربط تُحمَّل البيانات من GitHub إن وُجد الملف، وإلا تُرفع بياناتك الحالية لإنشائه. الرمز يبقى على هذا الجهاز فقط.</p>`,d=>{
+  const fresh=d.owner.trim()!==gh.owner||d.repo.trim()!==gh.repo||(d.path||'data.json')!==(gh.path||'data.json');
+  gh={owner:d.owner.trim(),repo:d.repo.trim(),path:(d.path||'data.json').trim(),branch:(d.branch||'main').trim(),token:(d.token||'').trim()||gh.token};
+  try{localStorage.setItem(GHK,JSON.stringify(gh))}catch(e){}
+  if(fresh){setBase(null);ghSha=null;clean()}
+  pull(true).then(()=>{if(ghOn()&&$('#syncBtn').dataset.st==='ok')toast('✅ تم الربط مع GitHub')})},'حفظ واتصال')}
+document.addEventListener('focusout',()=>{if(pendR)setTimeout(()=>{const a=document.activeElement;if(pendR&&!(a&&/INPUT|SELECT|TEXTAREA/.test(a.tagName))){pendR=false;render()}},60)});
+setInterval(()=>{if(document.visibilityState==='visible'&&!dirty)pull(true)},20000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pull(true)});
+window.addEventListener('online',()=>{dirty?schedulePush():pull(true)});
+
+// ===== التقارير =====
+let repPid=null;
+const repP=()=>db.projects.find(x=>x.id===(($('#repPj')||{}).value||repPid))||db.projects[0];
+function reportsModal(){if(!db.projects.length)return toast('لا توجد مشاريع');repPid=view.pid||db.projects[0].id;const p=repP();
+ modal('📄 التقارير',`
+ ${db.projects.length>1?`<label>المشروع<select id="repPj" data-act-change="repPj">${db.projects.map(x=>`<option value="${x.id}" ${x.id===p.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select></label>`:''}
+ <div class="repc"><b>🧾 كشف قائمة مدفوعات</b><small>بنفس ترتيب جداولك: المبلغ، المتبقي، إجمالي المدفوعات، المتابعة</small>
+  <select id="repL">${p.ledgers.map(l=>`<option value="${l.id}" ${l.id===view.lid?'selected':''}>${esc(l.name)} (${l.entries.length})</option>`).join('')}</select>
+  <button type="button" class="btn primary" data-act="repLedger">🖨 طباعة / حفظ PDF</button></div>
+ <div class="repc"><b>📊 التقرير الشامل للمشروع</b><small>نسبة الإنجاز، المراحل وحالتها، ملخص كل القوائم والتنبيهات</small>
+  <label class="check"><input type="checkbox" id="repAll"> تضمين تفاصيل كل القوائم</label>
+  <button type="button" class="btn primary" data-act="repProject">🖨 طباعة / حفظ PDF</button></div>
+ <div class="repc"><b>📗 تصدير Excel</b><small>ملف فيه ورقة لكل قائمة، وورقة للملخص، وورقة لمراحل العمل</small>
+  <button type="button" class="btn" data-act="repExcel">⬇ تنزيل ملف Excel</button></div>
+ <p class="muted small" style="margin:0">لحفظ التقرير PDF اختر «حفظ كـ PDF» من نافذة الطباعة.</p>`,null)}
+document.addEventListener('change',e=>{if(e.target.id==='repPj'){repPid=e.target.value;reportsModal()}});
+const ledRows=l=>{let run=0;const t=+l.total||0;return l.entries.map((e,i)=>{run+=(+e.amount||0);return{i:i+1,e,run,rem:t?t-run:null}})};
+const amt=v=>v===''||v==null?'':num(v);
+function ledgerTable(l){const t=+l.total||0,pd=paid(l),R=ledRows(l);
+ return `<table class="rt"><thead><tr><th>التسلسل</th><th>المهمة</th><th>التاريخ</th><th>المبلغ</th><th>تاريخ البدء</th><th>تاريخ التسليم</th><th>المتبقي</th><th>إجمالي المدفوعات</th><th>المتابعة</th><th>ملاحظات</th></tr></thead><tbody>
+ ${R.map(({i,e,run,rem})=>`<tr><td>${i}</td><td class="tl">${esc(e.name)}</td><td>${e.date?fmtD(e.date):''}</td><td>${amt(e.amount)}</td><td>${e.start?fmtD(e.start):''}</td><td>${e.end?fmtD(e.end):''}</td><td class="${rem<0?'neg':''}">${rem==null?'':num(rem)}</td><td>${num(run)}</td><td>${e.status&&FS[e.status]?FS[e.status][0]:''}</td><td class="tl">${esc(e.note||'')}</td></tr>`).join('')||'<tr><td colspan="10">لا توجد بنود</td></tr>'}
+ </tbody><tfoot><tr><td colspan="3">إجمالي المدفوعات لـ${esc(l.name)}</td><td>${num(pd)}</td><td colspan="6"></td></tr></tfoot></table>`}
+function ledgerSum(l){const t=+l.total||0,pd=paid(l);return `<div class="rsum"><div><span>المبلغ الإجمالي</span><b>${t?money(t):'غير محدد'}</b></div><div><span>إجمالي المدفوعات</span><b>${money(pd)}</b></div><div><span>المتبقي</span><b class="${t&&pd>t?'neg':''}">${t?money(t-pd):'—'}</b></div><div><span>عدد البنود</span><b>${l.entries.length}</b></div></div>${l.note?`<p class="rnote">${esc(l.note)}</p>`:''}`}
+function ledgerReport(p,l){const a=ledAlert(l);return `${ledgerSum(l)}${a?`<p class="ralert">${a.txt}</p>`:''}${ledgerTable(l)}`}
+function projectReport(p,all){const pg=prog(p),sp=spent(p),tt=p.ledgers.reduce((a,l)=>a+(+l.total||0),0),A=projAlerts(p);
+ return `<div class="rsum"><div><span>نسبة الإنجاز</span><b>${pg}%</b></div><div><span>المراحل المنجزة</span><b>${p.steps.filter(x=>x.done).length} / ${p.steps.length}</b></div><div><span>إجمالي المدفوعات</span><b>${money(sp)}</b></div><div><span>مجموع المبالغ الإجمالية</span><b>${tt?money(tt):'—'}</b></div></div>
+ <p class="rmeta">${[TYPES[p.type].label,p.location,p.start&&'البدء '+fmtD(p.start),p.end&&'التسليم المستهدف '+fmtD(p.end)].filter(Boolean).map(esc).join(' · ')}</p>
+ ${A.map(x=>`<p class="ralert">${x.txt}</p>`).join('')}
+ <h2>ملخص قوائم المدفوعات</h2><table class="rt"><thead><tr><th>القائمة</th><th>المبلغ الإجمالي</th><th>إجمالي المدفوعات</th><th>المتبقي</th><th>النسبة</th><th>البنود</th><th>تم التنفيذ</th><th>جاري</th><th>متأخر</th></tr></thead><tbody>
+ ${p.ledgers.map(l=>{const t=+l.total||0,pd=paid(l),c=k=>l.entries.filter(e=>e.status===k).length;return `<tr><td class="tl">${esc(l.name)}</td><td>${t?num(t):'—'}</td><td>${num(pd)}</td><td class="${t&&pd>t?'neg':''}">${t?num(t-pd):'—'}</td><td>${t?Math.round(pd/t*100)+'%':'—'}</td><td>${l.entries.length}</td><td>${c('done')}</td><td>${c('doing')}</td><td>${c('late')}</td></tr>`}).join('')}
+ </tbody><tfoot><tr><td>المجموع</td><td>${tt?num(tt):'—'}</td><td>${num(sp)}</td><td>${tt?num(tt-sp):'—'}</td><td colspan="5"></td></tr></tfoot></table>
+ <h2>مراحل العمل</h2><table class="rt"><thead><tr><th>#</th><th>المرحلة</th><th>الموعد المحدد</th><th>الحالة</th><th>تاريخ الإنجاز</th><th>ملاحظات</th></tr></thead><tbody>
+ ${p.steps.map((x,i)=>`<tr><td>${i+1}</td><td class="tl">${esc(x.title)}</td><td>${fmtD(x.date)}</td><td>${ST[st(p,x)][0]}</td><td>${x.done?fmtD(x.doneDate):''}</td><td class="tl">${esc(x.note||'')}</td></tr>`).join('')||'<tr><td colspan="6">لا توجد مراحل</td></tr>'}</tbody></table>
+ ${all?p.ledgers.map(l=>`<section class="pb"><h2>كشف ${esc(l.name)}</h2>${ledgerSum(l)}${ledgerTable(l)}</section>`).join(''):''}`}
+function printHTML(title,html){let el=$('#printArea');if(!el){el=document.createElement('div');el.id='printArea';document.body.appendChild(el)}
+ el.innerHTML=`<div class="rp"><header class="rph"><div><h1>${esc(title)}</h1><p>بُنيان — متابعة المشاريع العقارية</p></div><div class="rpd">${fmtD(today())}</div></header>${html}<footer class="rpf">أُعدّ بواسطة ${esc(who()||'—')} · ${new Date().toLocaleString(LOC)}</footer></div>`;
+ closeModal();setTimeout(()=>window.print(),150)}
+function loadXLSX(){return window.XLSX?Promise.resolve():new Promise((ok,no)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';sc.onload=ok;sc.onerror=no;document.head.appendChild(sc)})}
+async function excelExport(p){toast('جارٍ تجهيز ملف Excel…');
+ const sumRows=[['القائمة','المبلغ الإجمالي','إجمالي المدفوعات','المتبقي','عدد البنود']].concat(p.ledgers.map(l=>{const t=+l.total||0,pd=paid(l);return[l.name,t||'',pd,t?t-pd:'',l.entries.length]}));
+ const sheets=[['الملخص',sumRows]].concat(p.ledgers.map(l=>[l.name,[['التسلسل','المهمة','التاريخ','المبلغ','تاريخ البدء','تاريخ التسليم','المتبقي','إجمالي المدفوعات','المتابعة','ملاحظات','أضافه']].concat(ledRows(l).map(({i,e,run,rem})=>[i,e.name,e.date||'',e.amount===''?'':+e.amount,e.start||'',e.end||'',rem==null?'':rem,run,e.status&&FS[e.status]?FS[e.status][0]:'',e.note||'',e.by||'']))]))
+  .concat([['مراحل العمل',[['#','المرحلة','الموعد المحدد','الحالة','تاريخ الإنجاز','ملاحظات']].concat(p.steps.map((x,i)=>[i+1,x.title,x.date||'',ST[st(p,x)][0],x.doneDate||'',x.note||'']))]]);
+ const fname=`${p.name} - ${today()}`;
+ try{await loadXLSX();const wb=XLSX.utils.book_new();wb.Workbook={Views:[{RTL:true}]};const used=new Set();
+  sheets.forEach(([n,rows])=>{let nm=n.replace(/[\\\/\?\*\[\]:]/g,' ').slice(0,31)||'ورقة';while(used.has(nm))nm=nm.slice(0,28)+'_'+used.size;used.add(nm);const ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=rows[0].map((_,c)=>({wch:c===1?34:14}));ws['!views']=[{RTL:true}];XLSX.utils.book_append_sheet(wb,ws,nm)});
+  XLSX.writeFile(wb,fname+'.xlsx');toast('📗 تم تنزيل ملف Excel')}
+ catch(err){const csv='﻿'+sheets.map(([n,rows])=>[[n]].concat(rows).map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n')).join('\n\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=fname+'.csv';a.click();toast('تم التنزيل بصيغة CSV (تفتح في Excel)')}}
+const actions={
+ home:()=>go(),
+ themes:()=>themeModal(),
+ sync:()=>syncModal(),
+ ghOff:()=>{if(!confirm('فصل المزامنة على هذا الجهاز؟ ستبقى نسخة محلية من البيانات.'))return;gh={owner:gh.owner,repo:gh.repo};try{localStorage.setItem(GHK,JSON.stringify(gh))}catch(e){}setBase(null);ghSha=null;clean();closeModal();setGh('off')},
+ setTheme:d=>setLook('theme',d.v),
+ setStyle:d=>setLook('style',d.v),
+ open:d=>go(d.id),
+ filter:d=>{view.filter=d.v;render()},
+ tab:d=>{view.tab=d.v;render()},
+ closeModal,
+ newProject:()=>{if(!needUser())projectForm()},
+ editProject:()=>projectForm(cur()),
+ delProject:d=>{const p=db.projects.find(x=>x.id===(d.id||view.pid));if(!p)return;
+  if(!confirm(`مسح مشروع «${p.name}» نهائياً مع كل مراحله وتكاليفه؟\nلا يمكن التراجع عن هذا الإجراء.`))return;
+  db.projects=db.projects.filter(x=>x!==p);save();if(view.page==='project')go();else render();toast('تم مسح المشروع')},
+ loadTpl:()=>{const p=cur();p.steps=tplSteps(p.type,p.start).map(s=>({...s,by:who()}));save();render()},
+ addStep:()=>{if(!needUser())stepForm()},
+ editStep:d=>stepForm(cur().steps.find(s=>s.id===d.id)),
+ delStep:d=>{const p=cur();if(confirm('حذف هذه المرحلة؟')){p.steps=p.steps.filter(s=>s.id!==d.id);save();render()}},
+ up:d=>move(d.id,-1),down:d=>move(d.id,1),
+ toggle:d=>{if(!admin)return;const p=cur(),i=p.steps.findIndex(s=>s.id===d.id),s=p.steps[i];
+  if(!s.done){if(s!==nextStep(p))return toast('أكمل المرحلة السابقة أولاً');s.done=true;s.doneDate=today();s.doneBy=who();toast(prog(p)===100?'🎉 اكتمل المشروع!':'تم إكمال المرحلة')}
+  else{if(i!==lastDoneIdx(p))return toast('ألغِ إكمال المراحل اللاحقة أولاً');s.done=false;s.doneDate='';s.doneBy=''}
+  save();render()},
+ ledger:d=>{view.lid=d.id;view.sf='all';render()},
+ sfilter:d=>{view.sf=d.v;render()},
+ addLedger:()=>{if(needUser())return;modal('قسم حسابات جديد',`<label>اسم القسم<input name="name" required placeholder="مثلاً: الكهربائي، الألمنيوم"></label><label>المبلغ الإجمالي (اختياري)<input name="total" type="number" min="0" step="any"></label>`,d=>{const p=cur(),l={id:uid(),name:d.name.trim(),total:+d.total||0,note:'',entries:[],by:who()};p.ledgers.push(l);view.lid=l.id;save();render();toast('تمت إضافة القسم')},'إضافة')},
+ delLedger:d=>{const p=cur(),l=p.ledgers.find(x=>x.id===d.id);if(!l||!confirm(`حذف قسم «${l.name}» مع كل مدفوعاته (${l.entries.length})؟`))return;p.ledgers=p.ledgers.filter(x=>x!==l);view.lid=null;save();render();toast('تم حذف القسم')},
+ delEntry:d=>{const p=cur();for(const l of p.ledgers){const i=l.entries.findIndex(x=>x.id===d.id);if(i>-1){if(!confirm(`حذف «${l.entries[i].name}»؟`))return;l.entries.splice(i,1);break}}save();render()},
+ editItem:d=>itemForm(cur().items.find(i=>i.id===d.id)),
+ delItem:d=>{const p=cur();p.items=p.items.filter(i=>i.id!==d.id);save();render()},
+ admin:()=>{
+  if(admin){admin=false;render();return toast('تم الخروج من وضع المتحكم')}
+  if(!db.settings.pin)return modal('إنشاء كلمة مرور المتحكم',`<p class="muted" style="margin:0">أنشئ كلمة مرور للتحكم بالمنصة (إضافة المشاريع وتحديد التواريخ وإكمال المراحل). الزوار يشاهدون المتابعة فقط.</p><label>كلمة المرور (4 أحرف أو أرقام على الأقل)<input name="pin" type="password" required minlength="4"></label>`,d=>{db.settings.pin=d.pin;save();admin=true;render();toast('أهلاً بك في وضع المتحكم')},'إنشاء ودخول');
+  modal('دخول المتحكم',`<label>كلمة المرور<input name="pin" type="password" required></label>`,d=>{if(d.pin!==db.settings.pin){toast('كلمة المرور غير صحيحة');return false}admin=true;render();toast('أهلاً بك في وضع المتحكم')},'دخول')},
+ settings:()=>modal('الإعدادات',`
+  <h4 class="sh">⚙️ عام</h4>
+  <label>العملة<input name="currency" value="${esc(db.settings.currency)}"></label>
+  <label>الأشخاص الذين يقومون بالإضافة (اسم في كل سطر)<textarea name="people" rows="3">${esc(db.settings.people.join('\n'))}</textarea></label>
+  <h4 class="sh">💳 قوائم المدفوعات الافتراضية</h4>
+  <label>تُنشأ تلقائياً مع كل مشروع جديد (اسم في كل سطر)<textarea name="defl" rows="5">${esc(defL().join('\n'))}</textarea></label>
+  <label class="check"><input type="checkbox" name="applyAll"> أضف القوائم الناقصة أيضاً إلى المشاريع الحالية</label>
+  <h4 class="sh">🔔 تنبيه تجاوز المبلغ</h4>
+  <label class="check"><input type="checkbox" name="alertOn" ${db.settings.alertOn===false?'':'checked'}> نبّهني عند اقتراب أي قائمة من مبلغها الإجمالي أو تجاوزه</label>
+  <label>نسبة التنبيه المبكر (%)<input name="alertPct" type="number" min="1" max="100" value="${+db.settings.alertPct||90}"></label>
+  <h4 class="sh">🔐 الأمان والتقارير</h4>
+  <div class="tools"><button type="button" class="btn" data-act="changePass">🔑 تغيير كلمة المرور</button><button type="button" class="btn" data-act="reports">📄 التقارير</button></div>
+  <h4 class="sh">💾 النسخ الاحتياطي</h4>
+  <div class="tools"><button type="button" class="btn" data-act="exportData">⬇ تصدير نسخة احتياطية</button><label class="btn" style="flex-direction:row;font-weight:700">⬆ استيراد<input type="file" accept=".json,application/json" id="importFile" hidden></label><button type="button" class="btn danger" data-act="resetData">مسح كل البيانات</button></div>`,d=>{
+  db.settings.currency=d.currency||'د.ب';
+  db.settings.people=[...new Set(d.people.split('\n').map(x=>x.trim()).filter(Boolean))];
+  if(!db.settings.people.includes(who()))setWho(db.settings.people[0]||'');
+  const dl=[...new Set(d.defl.split('\n').map(x=>x.trim()).filter(Boolean))];db.settings.defLedgers=dl.length?dl:L5;
+  if(d.applyAll)db.projects.forEach(p=>defL().forEach(n=>{if(!p.ledgers.some(l=>l.name===n))p.ledgers.push({id:uid(),name:n,total:0,note:'',entries:[]})}));
+  db.settings.alertOn=!!d.alertOn;db.settings.alertPct=Math.min(100,Math.max(1,+d.alertPct||90));
+  save();render();toast('تم حفظ الإعدادات')}),
+ changePass:()=>modal('تغيير كلمة المرور',`
+  ${db.settings.pin?'<label>كلمة المرور الحالية<input name="old" type="password" required></label>':''}
+  <label>كلمة المرور الجديدة<input name="n1" type="password" required minlength="4"></label>
+  <label>تأكيد كلمة المرور الجديدة<input name="n2" type="password" required minlength="4"></label>
+  <p class="muted small" style="margin:0">كلمة المرور مشتركة لكل من يتحكم بالمنصة، وتتغير عندهم أيضاً بعد المزامنة.</p>`,d=>{
+  if(db.settings.pin&&d.old!==db.settings.pin){toast('كلمة المرور الحالية غير صحيحة');return false}
+  if(d.n1!==d.n2){toast('كلمتا المرور غير متطابقتين');return false}
+  db.settings.pin=d.n1;save();toast('🔑 تم تغيير كلمة المرور')},'تغيير'),
+ reports:()=>reportsModal(),
+ repLedger:()=>{const p=repP(),l=p.ledgers.find(x=>x.id===$('#repL').value)||p.ledgers[0];printHTML(`كشف ${l.name} — ${p.name}`,ledgerReport(p,l))},
+ repProject:()=>{const p=repP();printHTML(`التقرير الشامل — ${p.name}`,projectReport(p,$('#repAll').checked))},
+ repExcel:()=>excelExport(repP()),
+ exportData:()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.download='bunyan-backup-'+today()+'.json';a.click();toast('تم التصدير')},
+ resetData:()=>{if(confirm('سيتم مسح كل المشاريع والبيانات. متأكد؟')){db={settings:{...db.settings},projects:[]};save();closeModal();go();render()}}
+};
+function move(id,dir){const p=cur(),i=p.steps.findIndex(s=>s.id===id),j=i+dir;if(j<0||j>=p.steps.length)return;[p.steps[i],p.steps[j]]=[p.steps[j],p.steps[i]];save();render()}
+
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;if(el.dataset.act==='open'&&e.target.closest('input,label,select'))return;if(el.tagName==='A')e.preventDefault();const f=actions[el.dataset.act];f&&f(el.dataset,el)});
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+document.addEventListener('submit',e=>{e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f));
+ if(f.id==='mf'&&modalSubmit){if(modalSubmit(d)!==false)closeModal()}
+ if(f.id==='entryForm'){if(needUser())return;const p=cur(),l=p.ledgers.find(x=>x.id===view.lid);l.entries.push({id:uid(),name:d.name.trim(),date:d.date,amount:+d.amount||0,start:d.start,end:d.end,status:d.status||'',note:d.note,by:who()});save();render();toast('تمت الإضافة');alertToast(l);setTimeout(()=>{const n=$('#entryForm input[name=name]');n&&n.focus()},30)}
+ if(f.id==='itemForm'){if(needUser())return;cur().items.push({id:uid(),name:d.name,cat:d.cat,qty:+d.qty||0,price:+d.price||0,date:d.date||today(),by:who()});save();render();toast('تمت الإضافة');setTimeout(()=>{const n=$('#itemForm input[name=name]');n&&n.focus()},30)}});
+document.addEventListener('input',e=>{const f=e.target.form;if(f&&f.id==='itemForm'){const t=$('#liveTotal');t&&(t.textContent=num((+f.qty.value||0)*(+f.price.value||0))+' '+db.settings.currency)}});
+document.addEventListener('change',e=>{const el=e.target;
+ if(el.classList&&el.classList.contains('mv')){if(!admin||!el.value)return;const p=cur(),to=p.ledgers.find(x=>x.id===el.value);let e;for(const l of p.ledgers){const i=l.entries.findIndex(x=>x.id===el.dataset.id);if(i>-1){e=l.entries.splice(i,1)[0];break}}
+  if(e&&to){to.entries.push(e);to.entries.sort((a,b)=>(a.date||'').localeCompare(b.date||''));e.editedBy=who();save();render();toast('نُقل إلى '+to.name)}return}
+ if(el.id==='userSel'){if(el.value==='__add')return addPerson();setWho(el.value);save();toast('المستخدم الحالي: '+el.value);return}
+ if(el.dataset&&el.dataset.edit){if(!admin)return;const p=el.dataset.edit==='project'&&el.dataset.id?db.projects.find(x=>x.id===el.dataset.id):cur();if(!p)return;const k=el.dataset.edit,f=el.dataset.f;
+  let o=k==='project'?p:k==='step'?p.steps.find(x=>x.id===el.dataset.id):k==='ledger'?p.ledgers.find(x=>x.id===el.dataset.id):null;
+  if(k==='entry')for(const l of p.ledgers){o=l.entries.find(x=>x.id===el.dataset.id);if(o)break}
+  if(!o)return;
+  let v=el.type==='number'?(el.value===''?'':+el.value||0):el.value;if(f==='title'||f==='name'){v=v.trim();if(!v)return render()}
+  o[f]=v;o.editedBy=who();save();render();toast('تم حفظ التعديل');if(k==='ledger')alertToast(o);if(k==='entry'&&f==='amount')alertToast(p.ledgers.find(l=>l.entries.includes(o)));return}
+ if(el.id!=='importFile')return;const file=e.target.files[0];if(!file)return;const r=new FileReader();
+ r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.projects)throw 0;db=x;db.settings=db.settings||{currency:'د.ب',pin:''};db.settings.people=db.settings.people||['المالك'];migrate();save();closeModal();go();render();toast('تم الاستيراد')}catch(err){toast('ملف غير صالح')}};r.readAsText(file)});
+window.addEventListener('hashchange',route);
+route();
+setGh(ghOn()?'busy':'off');if(ghOn())pull(false);
+</script>
+</body>
+</html>

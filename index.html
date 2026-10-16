@@ -281,11 +281,15 @@ label.stat{display:block;border-color:var(--accent)}
 .pedit{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
 .pedit .inl{background:var(--bg)}
 @media(max-width:760px){
+ .top .wrap{height:auto;flex-wrap:wrap;padding-top:8px;padding-bottom:8px;gap:8px}
+ .top .wrap>.brand{flex:1 1 100%;justify-content:center}
+ .top .wrap>.row{flex:1 1 100%;justify-content:center}
+ .brand b{font-size:23px}.brand small{font-size:12px}
+ .usersel{flex:1;max-width:170px}.usersel select{max-width:none;flex:1}
  .ig{grid-template-columns:1fr 1fr}.ig .mini:first-child{grid-column:1/-1}
  .pedit{grid-template-columns:1fr 1fr}
  .addform .fname,.addform .fnote{grid-column:1/-1}.addform .btn{grid-column:1/-1}
  .usersel select{max-width:96px}
- .brand span:last-child{display:none}
  h1{font-size:23px}
  .stats{grid-template-columns:repeat(2,1fr)}
  .stats.three .stat b{font-size:15px}
@@ -298,7 +302,6 @@ label.stat{display:block;border-color:var(--accent)}
  .addform .btn{justify-content:center}
  .modal{align-items:flex-end;padding:0}
  .sheet{border-radius:18px 18px 0 0;max-width:none}
- .brand small{display:none}
  #adminBtn .lbl{display:none}
 }
 </style>

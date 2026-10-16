@@ -68,6 +68,9 @@ html[data-style=bold] h1{color:var(--accent-dark)}
 .ready{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;background:var(--bg);border-radius:12px;text-align:center}
 .ready .ricon{font-size:44px}.ready b{word-break:break-word}.ready small{color:var(--muted)}
 .bigb{justify-content:center;padding:13px;font-size:16px}
+.plist{display:flex;flex-direction:column;gap:8px}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.pav{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-dark);font-weight:800;flex:none}
 .thgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .thbtn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:2px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-size:12px;font-weight:700}
 .thbtn.on{border-color:var(--ink)}
@@ -467,7 +470,11 @@ function renderCosts(p){
  ${l.entries.length?`<tfoot><tr><td colspan="3">إجمالي المدفوعات لـ${esc(l.name)}</td><td>${num(pd)}</td><td colspan="${admin?7:6}"></td></tr></tfoot>`:''}</table></div>`}
 function render(){$('#app').innerHTML=view.page==='project'?renderProject():renderHome();applyAdmin();renderUsers()}
 function renderUsers(){const s=$('#userSel'),ps=db.settings.people;
- s.innerHTML=`<option value="" ${who()?'':'selected'} disabled>اختر اسمك</option>`+ps.map(n=>`<option ${n===who()?'selected':''}>${esc(n)}</option>`).join('')+`<option value="__add">＋ إضافة شخص</option>`}
+ s.innerHTML=`<option value="" ${who()?'':'selected'} disabled>اختر اسمك</option>`+ps.map(n=>`<option ${n===who()?'selected':''}>${esc(n)}</option>`).join('')+`<option value="__add">＋ إضافة شخص</option>`+(admin?`<option value="__manage">⚙ إدارة / حذف الأشخاص</option>`:'')}
+function peopleModal(){const ps=db.settings.people;
+ modal('👥 إدارة الأشخاص',`<div class="plist">${ps.map((n,i)=>`<div class="prow"><span class="pav">${esc((n.trim().split(/\s+/).pop().replace(/^ال/,'')||n)[0]||'؟')}</span><b class="grow">${esc(n)}</b>${n===who()?'<span class="pill blue">أنت</span>':''}<button type="button" class="rdel" data-act="delPerson" data-i="${i}" aria-label="حذف ${esc(n)}">🗑 حذف</button></div>`).join('')||'<p class="muted">لا يوجد أشخاص.</p>'}</div>
+ <div class="row gap"><input id="newPerson" placeholder="اسم شخص جديد" class="grow"><button type="button" class="btn primary" data-act="addPersonInline">＋ إضافة</button></div>
+ <p class="muted small" style="margin:0">حذف الشخص يزيله من القائمة فقط، وتبقى البنود التي أضافها محفوظة باسمه.</p>`,null)}
 function addPerson(){modal('إضافة شخص',`<label>الاسم<input name="n" required placeholder="مثلاً: المهندس خالد"></label>`,d=>{const n=d.n.trim();if(!n)return false;if(!db.settings.people.includes(n))db.settings.people.push(n);setWho(n);save();renderUsers();toast('تمت إضافة '+n)},'إضافة')}
 const needUser=()=>{if(who())return false;toast('اختر اسمك من القائمة في الأعلى أولاً');$('#userSel').focus();return true};
 function applyAdmin(){document.body.classList.toggle('is-admin',admin);$('#adminBtn').innerHTML=admin?'🔓 <span class="lbl">خروج المتحكم</span>':'🔒 <span class="lbl">دخول المتحكم</span>';try{sessionStorage.setItem(KEY+'_adm',admin?'1':'0')}catch(e){}}
@@ -731,6 +738,9 @@ const actions={
   else{if(i!==lastDoneIdx(p))return toast('ألغِ إكمال المراحل اللاحقة أولاً');s.done=false;s.doneDate='';s.doneBy=''}
   save();render()},
  ledger:d=>{view.lid=d.id;view.sf='all';render()},
+ delPerson:d=>{if(!admin)return toast('حذف الأشخاص للمتحكم فقط');const ps=db.settings.people,n=ps[+d.i];if(n==null)return;if(ps.length<=1)return toast('يجب أن يبقى شخص واحد على الأقل');if(!confirm(`حذف «${n}» من قائمة الأشخاص؟`))return;ps.splice(+d.i,1);if(who()===n)setWho(ps[0]||'');save();renderUsers();peopleModal();toast('تم حذف '+n)},
+ addPersonInline:()=>{const i=$('#newPerson'),n=(i&&i.value||'').trim();if(!n)return;if(db.settings.people.includes(n))return toast('الاسم موجود مسبقاً');db.settings.people.push(n);save();renderUsers();peopleModal();toast('تمت إضافة '+n)},
+ managePeople:()=>peopleModal(),
  sfilter:d=>{view.sf=d.v;render()},
  addLedger:()=>{if(needUser())return;modal('قسم حسابات جديد',`<label>اسم القسم<input name="name" required placeholder="مثلاً: الكهربائي، الألمنيوم"></label><label>المبلغ الإجمالي (اختياري)<input name="total" type="number" min="0" step="any"></label>`,d=>{const p=cur(),l={id:uid(),name:d.name.trim(),total:+d.total||0,note:'',entries:[],by:who()};p.ledgers.push(l);view.lid=l.id;save();render();toast('تمت إضافة القسم')},'إضافة')},
  delLedger:d=>{const p=cur(),l=p.ledgers.find(x=>x.id===d.id);if(!l||!confirm(`حذف قسم «${l.name}» مع كل مدفوعاته (${l.entries.length})؟`))return;p.ledgers=p.ledgers.filter(x=>x!==l);view.lid=null;save();render();toast('تم حذف القسم')},
@@ -745,6 +755,7 @@ const actions={
   <h4 class="sh">⚙️ عام</h4>
   <label>العملة<input name="currency" value="${esc(db.settings.currency)}"></label>
   <label>الأشخاص الذين يقومون بالإضافة (اسم في كل سطر)<textarea name="people" rows="3">${esc(db.settings.people.join('\n'))}</textarea></label>
+  <button type="button" class="btn" data-act="managePeople">👥 إدارة / حذف الأشخاص</button>
   <h4 class="sh">💳 قوائم المدفوعات الافتراضية</h4>
   <label>تُنشأ تلقائياً مع كل مشروع جديد (اسم في كل سطر)<textarea name="defl" rows="5">${esc(defL().join('\n'))}</textarea></label>
   <label class="check"><input type="checkbox" name="applyAll"> أضف القوائم الناقصة أيضاً إلى المشاريع الحالية</label>
@@ -794,7 +805,7 @@ document.addEventListener('input',e=>{const f=e.target.form;if(f&&f.id==='itemFo
 document.addEventListener('change',e=>{const el=e.target;
  if(el.classList&&el.classList.contains('mv')){if(!admin||!el.value)return;const p=cur(),to=p.ledgers.find(x=>x.id===el.value);let e;for(const l of p.ledgers){const i=l.entries.findIndex(x=>x.id===el.dataset.id);if(i>-1){e=l.entries.splice(i,1)[0];break}}
   if(e&&to){to.entries.push(e);to.entries.sort((a,b)=>(a.date||'').localeCompare(b.date||''));e.editedBy=who();save();render();toast('نُقل إلى '+to.name)}return}
- if(el.id==='userSel'){if(el.value==='__add')return addPerson();setWho(el.value);save();toast('المستخدم الحالي: '+el.value);return}
+ if(el.id==='userSel'){if(el.value==='__add')return addPerson();if(el.value==='__manage'){renderUsers();return peopleModal()}setWho(el.value);save();toast('المستخدم الحالي: '+el.value);return}
  if(el.dataset&&el.dataset.edit){if(!admin)return;const p=el.dataset.edit==='project'&&el.dataset.id?db.projects.find(x=>x.id===el.dataset.id):cur();if(!p)return;const k=el.dataset.edit,f=el.dataset.f;
   let o=k==='project'?p:k==='step'?p.steps.find(x=>x.id===el.dataset.id):k==='ledger'?p.ledgers.find(x=>x.id===el.dataset.id):null;
   if(k==='entry')for(const l of p.ledgers){o=l.entries.find(x=>x.id===el.dataset.id);if(o)break}
